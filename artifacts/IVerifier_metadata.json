@@ -1,0 +1,71 @@
+{
+	"compiler": {
+		"version": "0.8.31+commit.fd3a2265"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "bytes",
+						"name": "proof",
+						"type": "bytes"
+					},
+					{
+						"internalType": "bytes32[]",
+						"name": "publicInputs",
+						"type": "bytes32[]"
+					}
+				],
+				"name": "verify",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"notice": "================================================= PRIVATE MNT POOL ================================================ - Fixed denomination: 1 MNT - Commit / Withdraw model - Merkle Tree for deposits - Nullifiers to prevent double spending - Designed to work with Noir - View-Key for compliance",
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/zkleanpool.sol": "IVerifier"
+		},
+		"evmVersion": "osaka",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/zkleanpool.sol": {
+			"keccak256": "0x3f4d6c7ef087290cc647645d5f78a1a16b58913d1c8d2e198578d1e854d3b68d",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://e8f284a9aa288a5b743808db5cf3a35be6ad9f8255f700e54721284eb67c15dd",
+				"dweb:/ipfs/Qmdq232cKdqnp5VVSZusAPnwMTTpa9kANwd7Qfs21Lo4zc"
+			]
+		}
+	},
+	"version": 1
+}

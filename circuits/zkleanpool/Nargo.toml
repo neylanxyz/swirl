@@ -1,0 +1,7 @@
+[package]
+name = "zkleanpool"
+type = "bin"
+authors = ["wallaby"]
+compiler_version = ">=0.20.0"
+
+[dependencies]
