@@ -1,11 +1,11 @@
 [nargo] Completed with exit code 1
 error: Failed constraint
-   ┌─ src/main.nr:72:12
+   ┌─ src/main.nr:39:12
    │
-72 │     assert(bytes_to_field(computed) =
-= bytes_to_field(root));
-   │            ------------------------------------------------
+39 │     assert(current_hash ==
+root);
+   │            --------------------
    │
    = Call stack:
-     1. src/main.nr:72:12
+     1. src/main.nr:39:12
 Failed to solve program: 'Cannot satisfy constraint'

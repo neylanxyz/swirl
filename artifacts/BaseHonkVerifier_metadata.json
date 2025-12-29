@@ -78,11 +78,11 @@
 	},
 	"sources": {
 		"circuits/zkleanpool/contracts/Verifier.sol": {
-			"keccak256": "0xa736244a8b8ec6df9818ec7323f0e42be2fd2a3e08cc448ff11768aae8c0dea3",
+			"keccak256": "0x4dc06942ec70e44dd793ce91c59ccae997bd30a1aed5aaab4af29a1a72cafe0c",
 			"license": "Apache-2.0",
 			"urls": [
-				"bzz-raw://2d3ad789e6a91508daf957447c19d631321abbf89c418986a0e6b110344b9310",
-				"dweb:/ipfs/QmYVX2yZjKZDNx9AWarnwK3mYQRR9hyd4zvJY9Zvs9Bjqr"
+				"bzz-raw://bcb64d4b30d98c082217dbf83e590d3aa92524527eb76b4e1065410ba5d611b5",
+				"dweb:/ipfs/QmNz9Li7YF92n533fAENdnMGdJxHxWgji3LWoyVHRHJXTy"
 			]
 		}
 	},

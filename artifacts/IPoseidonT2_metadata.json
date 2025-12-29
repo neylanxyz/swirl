@@ -1,0 +1,65 @@
+{
+	"compiler": {
+		"version": "0.8.31+commit.fd3a2265"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "uint256[2]",
+						"name": "input",
+						"type": "uint256[2]"
+					}
+				],
+				"name": "poseidon",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/PoseidonTest.sol": "IPoseidonT2"
+		},
+		"evmVersion": "osaka",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/PoseidonTest.sol": {
+			"keccak256": "0x40c0435a39bbb6749ec404af8a45d5b4e68364572f25a99907dd9d06f2be812e",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://48b22d55354b4f1c818a4be59b6833c32c6788547842531086a9a891b6d89649",
+				"dweb:/ipfs/QmUgLTLF77Bt2ezXPGDRDFnaBYSfvHX2jkQmo1bGpEboTf"
+			]
+		}
+	},
+	"version": 1
+}

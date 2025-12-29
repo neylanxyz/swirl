@@ -38,13 +38,13 @@
 		"userdoc": {
 			"kind": "user",
 			"methods": {},
-			"notice": "================================================= PRIVATE MNT POOL ================================================ - Fixed denomination: 1 MNT - Commit / Withdraw model - Merkle Tree for deposits - Nullifiers to prevent double spending - Designed to work with Noir - View-Key for compliance",
+			"notice": "================================================= PRIVATE MNT POOL (POSEIDON) ================================================= - Fixed denomination: 10 MNT - Commit / Withdraw model - Poseidon-based Merkle Tree (BN254) - Nullifiers to prevent double spending - Noir-compatible",
 			"version": 1
 		}
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/zkleanpool.sol": "IVerifier"
+			"contracts/SwirlPrivatePool.sol": "IVerifier"
 		},
 		"evmVersion": "osaka",
 		"libraries": {},
@@ -52,18 +52,18 @@
 			"bytecodeHash": "ipfs"
 		},
 		"optimizer": {
-			"enabled": true,
+			"enabled": false,
 			"runs": 200
 		},
 		"remappings": []
 	},
 	"sources": {
-		"contracts/zkleanpool.sol": {
-			"keccak256": "0x3f4d6c7ef087290cc647645d5f78a1a16b58913d1c8d2e198578d1e854d3b68d",
+		"contracts/SwirlPrivatePool.sol": {
+			"keccak256": "0xbd5165171b75dfc264a00458fc62b478aca6c7cc8af30e6d407dd221afcf6d5d",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://e8f284a9aa288a5b743808db5cf3a35be6ad9f8255f700e54721284eb67c15dd",
-				"dweb:/ipfs/Qmdq232cKdqnp5VVSZusAPnwMTTpa9kANwd7Qfs21Lo4zc"
+				"bzz-raw://dab3168b8f386f0fafe13b96700c9b21138234d99726e02321d3e7ff88852c88",
+				"dweb:/ipfs/QmcmfyyLZsiwD96oF57aaHS8svyG8F85JUbiBLDDzjRwrd"
 			]
 		}
 	},

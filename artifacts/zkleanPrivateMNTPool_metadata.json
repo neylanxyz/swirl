@@ -11,6 +11,11 @@
 						"internalType": "address",
 						"name": "_verifier",
 						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_poseidon",
+						"type": "address"
 					}
 				],
 				"stateMutability": "nonpayable",
@@ -72,7 +77,7 @@
 					{
 						"indexed": false,
 						"internalType": "bytes32",
-						"name": "nullifier",
+						"name": "nullifierHash",
 						"type": "bytes32"
 					}
 				],
@@ -259,6 +264,19 @@
 			},
 			{
 				"inputs": [],
+				"name": "poseidon",
+				"outputs": [
+					{
+						"internalType": "contract IPoseidonT2",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "verifier",
 				"outputs": [
 					{
@@ -329,7 +347,7 @@
 				},
 				"withdraw(bytes,bytes32,bytes32,address)": {
 					"params": {
-						"nullifierHash": "Prevents double spend",
+						"nullifierHash": "Poseidon(nullifier)",
 						"proof": "Noir proof bytes",
 						"recipient": "MNT receiver",
 						"root": "Merkle root"
@@ -361,11 +379,11 @@
 	},
 	"sources": {
 		"contracts/zkleanpool.sol": {
-			"keccak256": "0x3f4d6c7ef087290cc647645d5f78a1a16b58913d1c8d2e198578d1e854d3b68d",
+			"keccak256": "0x4b2d534099e3f8baffa5b050b963c0b6727b537a890d11630e22f5f2a346b2fc",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://e8f284a9aa288a5b743808db5cf3a35be6ad9f8255f700e54721284eb67c15dd",
-				"dweb:/ipfs/Qmdq232cKdqnp5VVSZusAPnwMTTpa9kANwd7Qfs21Lo4zc"
+				"bzz-raw://994b6ce3c48a4b5ccc903e05285fb1d477112a796675bf4599bdaeaa83f4416d",
+				"dweb:/ipfs/QmVRrCTu2Pt1P56M65BPZBbbi3Lx3NzCy1uSdc6k7MGjP5"
 			]
 		}
 	},

@@ -1,0 +1,78 @@
+{
+	"compiler": {
+		"version": "0.8.31+commit.fd3a2265"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "addr",
+						"type": "address"
+					}
+				],
+				"name": "Deployed",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes",
+						"name": "bytecode",
+						"type": "bytes"
+					}
+				],
+				"name": "deploy",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "addr",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"helpers/ByteCodeDeployer.sol": "BytecodeDeployer"
+		},
+		"evmVersion": "osaka",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"helpers/ByteCodeDeployer.sol": {
+			"keccak256": "0x6658b2d8df3f480ac1916401a90f3e98271f28b8f8aaa9da0558889708ce235d",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://23be9ce456b6c37a8cb658ef38e98e5e32961c9ffd5a227d8ce34ddf3918d91c",
+				"dweb:/ipfs/QmcBTbRgDvaMyCL49eQUpuT2RNipUPnriiSj6b3ecQjufP"
+			]
+		}
+	},
+	"version": 1
+}
