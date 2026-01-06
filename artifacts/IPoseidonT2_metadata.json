@@ -38,7 +38,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/PoseidonTest.sol": "IPoseidonT2"
+			"contracts/SwirlPrivatePool.sol": "IPoseidonT2"
 		},
 		"evmVersion": "osaka",
 		"libraries": {},
@@ -46,18 +46,18 @@
 			"bytecodeHash": "ipfs"
 		},
 		"optimizer": {
-			"enabled": false,
+			"enabled": true,
 			"runs": 200
 		},
 		"remappings": []
 	},
 	"sources": {
-		"contracts/PoseidonTest.sol": {
-			"keccak256": "0x40c0435a39bbb6749ec404af8a45d5b4e68364572f25a99907dd9d06f2be812e",
+		"contracts/SwirlPrivatePool.sol": {
+			"keccak256": "0x1be66276777054fcd46fa1a6b2b7d9880510c1ed3e98640fdee4410e5ffc9469",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://48b22d55354b4f1c818a4be59b6833c32c6788547842531086a9a891b6d89649",
-				"dweb:/ipfs/QmUgLTLF77Bt2ezXPGDRDFnaBYSfvHX2jkQmo1bGpEboTf"
+				"bzz-raw://abaca7a6d256c868e8f21ec6da5e99620ac71922c8f683f5108afbfb11a1dc62",
+				"dweb:/ipfs/QmeFXn1vzGuoNazufRn7WDoF4d3FdAakDhgc75uSTaqL4r"
 			]
 		}
 	},
