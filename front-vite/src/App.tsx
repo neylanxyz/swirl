@@ -1,36 +1,69 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
+import { DepositButton } from './components/DepositButton'
+import { useSwirlPool } from './hooks/useSwirlPool'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { isConnected, address, currentRoot, nextIndex, denomination, isLoading } = useSwirlPool()
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
+      <h1>Swirl Private Pool</h1>
+
+      <div style={{ marginBottom: '2rem' }}>
+        <ConnectButton />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-      <ConnectButton />
-    </>
+
+      {isConnected && address && (
+        <div style={{
+          marginBottom: '2rem',
+          padding: '1rem',
+          borderRadius: '0.5rem',
+          border: '1px solid #ddd',
+        }}
+        >
+          <h2>Wallet Info</h2>
+          <p><strong>Address:</strong> {address}</p>
+          <p><strong>Chain:</strong> Mantle Sepolia Testnet</p>
+        </div>
+      )}
+
+      {isConnected && (
+        <div style={{ marginBottom: '2rem' }}>
+          <h2>Pool Status</h2>
+          {isLoading ? (
+            <p>Loading pool data...</p>
+          ) : (
+            <div style={{
+              padding: '1rem',
+              borderRadius: '0.5rem',
+              border: '1px solid #ddd'
+            }}>
+              <p><strong>Current Root:</strong> {currentRoot || 'N/A'}</p>
+              <p><strong>Next Index:</strong> {nextIndex?.toString() || 'N/A'}</p>
+              <p><strong>Denomination:</strong> {denomination ? `${denomination.toString()} wei` : 'N/A'}</p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {isConnected && (
+        <div>
+          <h2>Deposit</h2>
+          <DepositButton />
+        </div>
+      )}
+
+      {!isConnected && (
+        <div style={{
+          padding: '1rem',
+          borderRadius: '0.5rem',
+          border: '1px solid #ffc107'
+        }}>
+          <p>Please connect your wallet to interact with the pool.</p>
+        </div>
+      )}
+    </div>
   )
 }
 

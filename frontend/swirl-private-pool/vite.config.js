@@ -3,6 +3,7 @@ import { NodeGlobalsPolyfillPlugin } from "@esbuild-plugins/node-globals-polyfil
 
 export default defineConfig({
   optimizeDeps: {
+    exclude: ['snarkjs'], // Importante!
     esbuildOptions: {
       define: {
         global: "globalThis",
@@ -11,6 +12,9 @@ export default defineConfig({
         NodeGlobalsPolyfillPlugin({
           buffer: true,
         }),
+        react(),
+        wasm(),
+        topLevelAwait()
       ],
     },
   },

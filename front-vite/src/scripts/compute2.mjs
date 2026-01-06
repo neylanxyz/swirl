@@ -1,6 +1,27 @@
 import { buildPoseidon } from "circomlibjs";
+import { ethers } from "ethers";
+import crypto from "crypto"; // Node.js crypto
 
+// ================================
+// CONFIG
+// ================================
 const TREE_DEPTH = 20;
+
+// Replace with your deployed contract address
+const CONTRACT_ADDRESS = "0x808b1e06452B8653cA083652031102CC6e1580DB";
+
+// Replace with your provider (Alchemy, Infura, etc.)
+const provider = new ethers.JsonRpcProvider(
+  "https://mantle-sepolia.g.alchemy.com/v2/zUHKYncmcmrExkll9sLz3",
+  { chainId: 5003, name: "mantle-sepolia" }
+);
+
+// ABI with only needed getters
+const ABI = [
+  "function nextIndex() view returns (uint32)",
+  "function currentRoot() view returns (bytes32)",
+  "function getAllFilledSubtrees() view returns (bytes32[])"
+];
 
 // ================================
 // Field helpers
@@ -13,9 +34,47 @@ function fieldToBytes32(poseidon, x) {
   const v = BigInt(poseidon.F.toObject(x));
   return "0x" + v.toString(16).padStart(64, "0");
 }
+function fieldToBytes32Safe(x) {
+  // Accept BigInt or hex strings already < 32 bytes
+  if (typeof x === "bigint") {
+    return "0x" + x.toString(16).padStart(64, "0");
+  }
+  return x; // assume it's already hex string
+}
+function toBytes32Hex(x) {
+  if (typeof x === "bigint") {
+    return "0x" + x.toString(16).padStart(64, "0");
+  }
+  if (x instanceof Uint8Array) {
+    return "0x" + Array.from(x).map(b => b.toString(16).padStart(2, "0")).join("");
+  }
+  // assume it's already a hex string
+  return x;
+}
+function fieldToDecimal(poseidon, x) {
+  // x can be:
+  // - a BigInt already => just return string
+  // - a Poseidon Fp element => convert using F.toObject
+  if (typeof x === "bigint") return x.toString();
+  if (poseidon && poseidon.F && typeof poseidon.F.toObject === "function") {
+    return poseidon.F.toObject(x).toString();
+  }
+  throw new Error("Cannot convert to decimal: " + x);
+}
+function bytes32ToBigInt(b) {
+  if (typeof b === "string" && b.startsWith("0x")) {
+    return BigInt(b);
+  } else if (typeof b === "bigint") {
+    return b;
+  } else {
+    throw new Error("Invalid type for bytes32ToBigInt: " + b);
+  }
+}
+
+
 
 // ================================
-// Build zero nodes
+// Build zero nodes (Poseidon hash of 0)
 // ================================
 function buildZeroes(poseidon, depth) {
   const zeroes = [];
@@ -27,9 +86,9 @@ function buildZeroes(poseidon, depth) {
 }
 
 // ================================
-// Merkle tree insertion
+// Build Merkle path for a single leaf
 // ================================
-function insertLeaf(poseidon, leaf, leafIndex, zeros, filledSubtrees) {
+function buildMerklePath(poseidon, leaf, leafIndex, zeros, filledSubtrees) {
   let currentHash = leaf;
   let index = leafIndex;
 
@@ -37,91 +96,91 @@ function insertLeaf(poseidon, leaf, leafIndex, zeros, filledSubtrees) {
   const merkleIndices = [];
 
   for (let i = 0; i < TREE_DEPTH; i++) {
-    const isRightNode = index % 2 === 1;
-    let sibling;
-
-    if (!isRightNode) {
-      // left node → sibling is zero node
-      sibling = zeros[i];
-      filledSubtrees[i] = currentHash; // update filled subtree
-      currentHash = poseidon([currentHash, sibling]);
-    } else {
-      // right node → sibling from last left
-      sibling = filledSubtrees[i];
-      currentHash = poseidon([sibling, currentHash]);
-    }
-
+    const sibling = index % 2n === 0n ? zeros[i] : filledSubtrees[i];
     merklePath.push(sibling);
-    merkleIndices.push(index % 2);
-    index = Math.floor(index / 2);
+    merkleIndices.push(index % 2n);
+
+    // compute currentHash for next level
+    currentHash = index % 2n === 0n
+      ? poseidon([currentHash, sibling])
+      : poseidon([sibling, currentHash]);
+
+    index = index / 2n;
   }
 
-  const root = currentHash;
-  return { root, merklePath, merkleIndices };
+  return { root: currentHash, merklePath, merkleIndices };
+}
+
+
+// ================================
+// Generate a random 254-bit BigInt (Node.js version)
+// ================================
+function randomBigInt() {
+  const buf = crypto.randomBytes(32);
+  return BigInt("0x" + buf.toString("hex")) & ((1n << 254n) - 1n);
 }
 
 // ================================
-// Main
+// Main function
 // ================================
 async function main() {
   const poseidon = await buildPoseidon();
 
-  // ===== Private inputs for multiple deposits =====
-  const deposits = [
-    {
-      secret: 150015563425453000524434495039824308762691255030671885575353022904829657144n,
-      nullifier: 351025985351919752355631341381309546739223537443396316348503718025399401663n
-    },
-    {
-      secret: 14717651873891545948228336795033014873269671791226615914351188746877260605n,
-      nullifier: 26361627504641361997299668954555824980619644663723055082479410910138828356n
-    },
-    {
-      secret: 32514725316361865739101909693750314313579931353347202496981105411645577668n,
-      nullifier: 315072238410687239507220556253075414656851049287165777217229810181187207224n,
-    }
-  ];
+  // === Connect to contract ===
+  const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, provider);
 
-  const zeroes = buildZeroes(poseidon, TREE_DEPTH);
-  const filledSubtrees = [...zeroes]; // stateful filledSubtrees
+  // === Step 1: fetch on-chain state ===
+  const nextIndexBN = await contract.nextIndex();
+  const nextIndex = BigInt(nextIndexBN); // BigInt
+  const leafIndex = 0n;//nextIndex - 1n; // your leaf index after deposit
 
-  for (let depositIndex = 0; depositIndex < deposits.length; depositIndex++) {
-    const { secret, nullifier } = deposits[depositIndex];
+  const currentRoot = await contract.currentRoot();
+  const rawSubtrees = await contract.getAllFilledSubtrees();
+  const filledSubtrees = rawSubtrees.map(bytes32ToBigInt);
 
-    // Commitment
-    const commitment = poseidon([secret, nullifier]);
+  // === Step 2: generate secret and nullifier ===
+  const secret = 221298477636339949057548167593224959821007762943954710158846228018887916899n;//randomBigInt();
+  const nullifier = 449923872617343972930614807539800076469236091160820040557567436683998548601n;//randomBigInt();
 
-    // Nullifier hash
-    const nullifierHash = poseidon([nullifier, 0n]);
+  // === Step 3: compute commitment ===
+  const commitment = poseidon([secret, nullifier]);
 
-    // Insert leaf into Merkle tree
-    const { root, merklePath, merkleIndices } = insertLeaf(
-      poseidon,
-      commitment,
-      depositIndex,
-      zeroes,
-      filledSubtrees
-    );
+  // === Step 4: compute nullifier hash ===
+  const nullifierHash = poseidon([nullifier, 0n]);
 
-    console.log(`===== Deposit #${depositIndex} =====`);
-    console.log(`secret = "${secret}"`);
-    console.log(`nullifier = "${nullifier}"\n`);
+  // === Step 5: build zeros ===
+  const zeros = buildZeroes(poseidon, TREE_DEPTH);
 
-    console.log("merkle_path = [");
-    merklePath.forEach(v => console.log(`  "${fieldToString(poseidon, v)}",`));
-    console.log("]\n");
+  // === Step 6: build Merkle path ===
+  const { root, merklePath, merkleIndices } = buildMerklePath(
+    poseidon,
+    commitment,
+    leafIndex,
+    zeros,
+    filledSubtrees
+  );
 
-    console.log("merkle_indices = [");
-    merkleIndices.forEach(v => console.log(`  ${v},`));
-    console.log("]\n");
+  // === Step 7: output info for ZK proof ===
+  console.log("===== Deposit Info =====");
+  console.log('secret =', `"${secret.toString()}"`);
+  console.log('nullifier =', `"${nullifier.toString()}"`);
+  console.log('commitment =', `"${fieldToDecimal(poseidon, commitment)}"`);
+  console.log('nullifier_hash =', `"${fieldToDecimal(poseidon, nullifierHash)}"`);
+  console.log('nullifier_hash_bytes32 =', `"${fieldToBytes32(poseidon, nullifierHash)}"`);
+  console.log('leafIndex =', `"${leafIndex.toString()}"`);
+  console.log('currentRoot =', `"${currentRoot}"`);
+  console.log('root (computed) =', `"${fieldToDecimal(poseidon, root)}"`);
+  console.log('root (bytes32) =', `${fieldToBytes32(poseidon, root)}`);
 
-    console.log(`root = "${fieldToString(poseidon, root)}"`);
-    console.log(`nullifier_hash = "${fieldToString(poseidon, nullifierHash)}"\n`);
+  // --- Output Merkle path ---
+  console.log("\nmerkle_path = [");
+  merklePath.forEach(v => console.log(`  "${fieldToDecimal(poseidon, v)}",`));
+  console.log("]");
 
-    console.log(`root_bytes32 = "${fieldToBytes32(poseidon, root)}"`);
-    console.log(`nullifier_hash_bytes32 = "${fieldToBytes32(poseidon, nullifierHash)}"`);
-    console.log("\n");
-  }
+  // --- Output Merkle indices ---
+  console.log("\nmerkle_indices = [");
+  merkleIndices.forEach(i => console.log(`  ${i},`));
+  console.log("]");
 }
 
 main();
