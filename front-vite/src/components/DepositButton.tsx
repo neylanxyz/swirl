@@ -80,7 +80,7 @@ export function DepositButton() {
                     fontSize: '1rem',
                     fontWeight: 'bold',
                     // backgroundColor: isDepositing || isConfirming ? '#ccc' : '#007bff',
-                    color: 'white',
+                    // color: 'white',
                     border: 'none',
                     borderRadius: '0.5rem',
                     cursor: isDepositing || isConfirming || !isConnected ? 'not-allowed' : 'pointer',

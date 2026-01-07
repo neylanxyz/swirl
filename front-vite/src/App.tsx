@@ -2,6 +2,7 @@ import './App.css'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { DepositButton } from './components/DepositButton'
 import { useSwirlPool } from './hooks/useSwirlPool'
+import { WithdrawButton } from './components/WithdrawButton'
 
 function App() {
   const { isConnected, address, currentRoot, nextIndex, denomination, isLoading } = useSwirlPool()
@@ -51,6 +52,8 @@ function App() {
         <div>
           <h2>Deposit</h2>
           <DepositButton />
+          <h2>Withdraw</h2>
+          <WithdrawButton />
         </div>
       )}
 

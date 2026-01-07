@@ -12,9 +12,9 @@ export default defineConfig({
         NodeGlobalsPolyfillPlugin({
           buffer: true,
         }),
-        react(),
-        wasm(),
-        topLevelAwait()
+        // react(),
+        // wasm(),
+        // topLevelAwait()
       ],
     },
   },

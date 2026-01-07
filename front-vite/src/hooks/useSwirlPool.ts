@@ -28,6 +28,12 @@ export function useSwirlPool() {
     functionName: 'nextIndex',
   });
 
+  const { data: getAllFilledSubtrees, isLoading: isLoadingGetAllFilledSubtrees } = useReadContract({
+    address: SWIRL_PRIVATE_POOL_ADDRESS,
+    abi: SWIRL_PRIVATE_POOL_ABI,
+    functionName: 'getAllFilledSubtrees',
+  });
+
   const { data: maxLeaves, isLoading: isLoadingMaxLeaves } = useReadContract({
     address: SWIRL_PRIVATE_POOL_ADDRESS,
     abi: SWIRL_PRIVATE_POOL_ABI,
@@ -52,7 +58,7 @@ export function useSwirlPool() {
    * @param commitment - bytes32 commitment hash
    * @param encryptedNote - encrypted note bytes as hex string
    */
-  const deposit = async (commitment: `0x${string}`, encryptedNote: Hex) => {
+  const deposit = async (commitment: Address, encryptedNote: Hex) => {
     if (!denomination) {
       throw new Error('Denomination not loaded');
     }
@@ -75,8 +81,8 @@ export function useSwirlPool() {
    */
   const withdraw = async (
     proof: Hex,
-    root: `0x${string}`,
-    nullifierHash: `0x${string}`,
+    root: Address,
+    nullifierHash: Address,
     recipient: Address
   ) => {
     await writeContract({
@@ -97,7 +103,8 @@ export function useSwirlPool() {
     currentRoot,
     nextIndex,
     maxLeaves,
-    isLoading: isLoadingDenomination || isLoadingRoot || isLoadingIndex || isLoadingMaxLeaves,
+    getAllFilledSubtrees,
+    isLoading: isLoadingDenomination || isLoadingRoot || isLoadingIndex || isLoadingMaxLeaves || isLoadingGetAllFilledSubtrees,
 
     // Deposit state
     deposit,
