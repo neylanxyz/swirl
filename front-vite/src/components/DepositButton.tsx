@@ -2,15 +2,12 @@ import { useState, useEffect } from 'react';
 import { useSwirlPool } from '../hooks/useSwirlPool';
 import { getPoseidon, randField, toBytes32 } from '../helpers/zk';
 import { stringToBytes, bytesToHex } from 'viem';
+import { useCommitmentStore } from '../stores/commitmentStore';
 
 export function DepositButton() {
     const { deposit, isDepositing, isConfirming, isConfirmed, depositError, isConnected } = useSwirlPool();
     const [status, setStatus] = useState<string>('');
-    const [commitmentData, setCommitmentData] = useState<{
-        secret: bigint;
-        nullifier: bigint;
-        commitment: string;
-    } | null>(null);
+    const { commitmentData, setCommitmentData } = useCommitmentStore();
 
     const handleDeposit = async () => {
         if (!isConnected) {
