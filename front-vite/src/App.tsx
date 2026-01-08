@@ -3,6 +3,7 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { DepositButton } from './components/DepositButton'
 import { useSwirlPool } from './hooks/useSwirlPool'
 import { WithdrawButton } from './components/WithdrawButton'
+import ProofComponent from './components/Proof'
 
 function App() {
   const { isConnected, address, currentRoot, nextIndex, denomination, isLoading } = useSwirlPool()
@@ -54,6 +55,8 @@ function App() {
           <DepositButton />
           <h2>Withdraw</h2>
           <WithdrawButton />
+          <h2>Proof</h2>
+          <ProofComponent />
         </div>
       )}
 
