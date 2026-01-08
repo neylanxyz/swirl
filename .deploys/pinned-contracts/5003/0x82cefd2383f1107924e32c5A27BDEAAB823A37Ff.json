@@ -1,0 +1,27 @@
+{
+  "name": "<at address>",
+  "address": "0x82cefd2383f1107924e32c5A27BDEAAB823A37Ff",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "uint256[2]",
+          "name": "input",
+          "type": "uint256[2]"
+        }
+      ],
+      "name": "poseidon",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    }
+  ],
+  "filePath": "zklean/helpers/Poseidon2.abi",
+  "pinnedAt": 1767101786539
+}

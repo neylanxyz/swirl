@@ -45,7 +45,7 @@ contract SwirlPrivatePool {
                               CONSTANTS
     //////////////////////////////////////////////////////////////*/
 
-    uint256 public constant DENOMINATION = 10 ether;
+    uint256 public constant DENOMINATION = 1 ether;
     uint32  public constant TREE_DEPTH   = 20;
     uint32  public constant MAX_LEAVES   = uint32(1 << TREE_DEPTH);
 
@@ -185,4 +185,20 @@ contract SwirlPrivatePool {
     function isSpent(bytes32 nullifierHash) external view returns (bool) {
         return nullifierHashes[nullifierHash];
     }
+
+    function getFilledSubtree(uint32 index) public view returns (bytes32) {
+        if (index >= TREE_DEPTH) {
+            return bytes32(0); // out-of-bounds, return zero instead of reverting
+        }
+        return filledSubtrees[index];
+    }
+
+    function getAllFilledSubtrees() public view returns (bytes32[] memory) {
+        bytes32[] memory result = new bytes32[](TREE_DEPTH);
+        for (uint32 i = 0; i < TREE_DEPTH; i++) {
+            result[i] = filledSubtrees[i];
+        }
+        return result;
+    }
+
 }
