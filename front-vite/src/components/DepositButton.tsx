@@ -3,11 +3,13 @@ import { useSwirlPool } from '../hooks/useSwirlPool';
 import { getPoseidon, randField, toBytes32 } from '../helpers/zk';
 import { stringToBytes, bytesToHex } from 'viem';
 import { useCommitmentStore } from '../stores/commitmentStore';
+import { DepositSuccessModal } from './DepositSuccessModal';
 
 export function DepositButton() {
-    const { deposit, isDepositing, isConfirming, isConfirmed, depositError, isConnected } = useSwirlPool();
+    const { deposit, isDepositing, isConfirming, isConfirmed, depositError, isConnected, nextIndex } = useSwirlPool();
     const [status, setStatus] = useState<string>('');
-    const { commitmentData, setCommitmentData } = useCommitmentStore();
+    const [showModal, setShowModal] = useState(false);
+    const { encodeData, encodedData } = useCommitmentStore();
 
     const handleDeposit = async () => {
         if (!isConnected) {
@@ -18,19 +20,18 @@ export function DepositButton() {
         try {
             setStatus('Generating commitment...');
 
+            // Get leafIndex from nextIndex
+            const leafIndex = Number(nextIndex || 0);
+            if (!nextIndex) {
+                console.warn('nextIndex not available, using 0 as fallback');
+            }
+
             // Generate ZK commitment
             const poseidon = await getPoseidon();
             const secret = randField(); // BigInt
             const nullifier = randField(); // BigInt
             const commitment = poseidon([secret, nullifier]); // BigInt
             const commitmentBytes32 = toBytes32(poseidon.F.toObject(commitment)) as `0x${string}`;
-
-            // Store commitment data for display
-            setCommitmentData({
-                secret,
-                nullifier,
-                commitment: commitmentBytes32,
-            });
 
             // Create encrypted note (dummy for now) - convert to hex for viem
             const encryptedNoteBytes = stringToBytes('dummy note');
@@ -40,6 +41,13 @@ export function DepositButton() {
 
             // Call deposit function
             await deposit(commitmentBytes32, encryptedNote);
+
+            // Encode and store commitment data (includes leafIndex)
+            encodeData({
+                secret,
+                nullifier,
+                leafIndex
+            });
 
             setStatus('Transaction sent! Waiting for confirmation...');
         } catch (err) {
@@ -67,6 +75,13 @@ export function DepositButton() {
         }
     }, [depositError]);
 
+    // Open modal when deposit is confirmed and data is encoded
+    useEffect(() => {
+        if (isConfirmed && encodedData) {
+            setShowModal(true);
+        }
+    }, [isConfirmed, encodedData]);
+
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', padding: '1rem' }}>
             <button
@@ -90,7 +105,6 @@ export function DepositButton() {
                 <div
                     style={{
                         padding: '0.75rem',
-                        // backgroundColor: status.includes('Error') ? '#fee' : '#efe',
                         border: `1px solid ${status.includes('Error') ? '#fcc' : '#cfc'}`,
                         borderRadius: '0.5rem',
                         whiteSpace: 'pre-wrap',
@@ -102,23 +116,12 @@ export function DepositButton() {
                 </div>
             )}
 
-            {commitmentData && (
-                <div
-                    style={{
-                        padding: '0.75rem',
-                        // backgroundColor: '#f5f5f5',
-                        border: '1px solid #ddd',
-                        borderRadius: '0.5rem',
-                        fontFamily: 'monospace',
-                        fontSize: '0.75rem',
-                        overflow: 'auto',
-                    }}
-                >
-                    <div><strong>Secret:</strong> {commitmentData.secret.toString()}</div>
-                    <div><strong>Nullifier:</strong> {commitmentData.nullifier.toString()}</div>
-                    <div><strong>Commitment:</strong> {commitmentData.commitment}</div>
-                </div>
-            )}
+            {/* Modal for encoded data */}
+            <DepositSuccessModal
+                isOpen={showModal}
+                onClose={() => setShowModal(false)}
+                encodedData={encodedData}
+            />
         </div>
     );
 }
