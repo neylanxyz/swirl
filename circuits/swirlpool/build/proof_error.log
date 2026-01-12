@@ -2,9 +2,9 @@
 error: Failed constraint
    ┌─ src/main.nr:39:12
    │
-39 │     assert(current_hash ==
-root);
-   │            --------------------
+39 │     assert(current_hash == root);
+   │
+--------------------
    │
    = Call stack:
      1. src/main.nr:39:12

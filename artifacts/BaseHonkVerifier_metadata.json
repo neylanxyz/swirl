@@ -63,7 +63,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"circuits/zkleanpool/contracts/Verifier.sol": "BaseHonkVerifier"
+			"circuits/swirlpool/contracts/Verifier.sol": "BaseHonkVerifier"
 		},
 		"evmVersion": "osaka",
 		"libraries": {},
@@ -72,12 +72,12 @@
 		},
 		"optimizer": {
 			"enabled": true,
-			"runs": 200
+			"runs": 1
 		},
 		"remappings": []
 	},
 	"sources": {
-		"circuits/zkleanpool/contracts/Verifier.sol": {
+		"circuits/swirlpool/contracts/Verifier.sol": {
 			"keccak256": "0x4dc06942ec70e44dd793ce91c59ccae997bd30a1aed5aaab4af29a1a72cafe0c",
 			"license": "Apache-2.0",
 			"urls": [

@@ -18,7 +18,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"circuits/zkleanpool/contracts/Verifier.sol": "FrLib"
+			"circuits/swirlpool/contracts/Verifier2.sol": "FrLib"
 		},
 		"evmVersion": "osaka",
 		"libraries": {},
@@ -27,17 +27,17 @@
 		},
 		"optimizer": {
 			"enabled": true,
-			"runs": 200
+			"runs": 100
 		},
 		"remappings": []
 	},
 	"sources": {
-		"circuits/zkleanpool/contracts/Verifier.sol": {
-			"keccak256": "0x4dc06942ec70e44dd793ce91c59ccae997bd30a1aed5aaab4af29a1a72cafe0c",
+		"circuits/swirlpool/contracts/Verifier2.sol": {
+			"keccak256": "0x732c8062011adc42d7dfb7147a99983a079cc32d322dcdd5976d23418537c13b",
 			"license": "Apache-2.0",
 			"urls": [
-				"bzz-raw://bcb64d4b30d98c082217dbf83e590d3aa92524527eb76b4e1065410ba5d611b5",
-				"dweb:/ipfs/QmNz9Li7YF92n533fAENdnMGdJxHxWgji3LWoyVHRHJXTy"
+				"bzz-raw://16c1a37f20d2cd7925a7c2d213fe8e8a3272fe5a376c4aba269942bc8afdd0e2",
+				"dweb:/ipfs/QmVgZQBs8mpnNspvd6ZaL5TdUL4YNHT5M3xPyC4vf5Es46"
 			]
 		}
 	},
