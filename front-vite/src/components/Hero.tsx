@@ -1,10 +1,14 @@
-import { memo } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { containerPadding } from '../utils/classNames'
 import { STATS } from '../utils/constants'
 import LogoImage from "../../public/logo.png"
+import { SWIRL_PRIVATE_POOL_ADDRESS } from '../helpers/contract'
+import { publicClient } from '../config/client'
+import { useSwirlPool } from '../hooks/useSwirlPool'
+import { formatEther } from 'viem'
 
 interface StatItemProps {
-  value: string
+  value: string | bigint | undefined | number
   label: string
 }
 
@@ -18,6 +22,28 @@ const StatItem = memo(function StatItem({ value, label }: StatItemProps) {
 })
 
 export const Hero = memo(function Hero() {
+
+  const { nextIndex } = useSwirlPool();
+
+  const [balance, setBalance] = useState<bigint | undefined | string>(undefined);
+
+  useEffect(() => {
+    try {
+      const contractBalance = async () => {
+
+        const balanceContract = await publicClient.getBalance({
+          address: SWIRL_PRIVATE_POOL_ADDRESS,
+        })
+        setBalance(`${formatEther(balanceContract)} MNT`)
+      }
+      contractBalance()
+    }
+    catch (error) {
+      console.log("error =", error)
+    }
+
+  }, [balance])
+
   return (
     <section className={`w-full py-12 md:py-20 lg:py-28 ${containerPadding}`}>
       <div className="flex flex-col lg:flex-row justify-between items-start gap-12 lg:gap-16 xl:gap-20">
@@ -37,8 +63,8 @@ export const Hero = memo(function Hero() {
 
           {/* Stats */}
           <div className="flex flex-wrap gap-8 sm:gap-12 lg:gap-16">
-            <StatItem value={STATS.tvl} label="Total Value Locked" />
-            <StatItem value={STATS.deposits} label="Total Deposits" />
+            <StatItem value={balance} label="Total Value Locked" />
+            <StatItem value={nextIndex ? nextIndex : STATS.deposits} label="Total Deposits" />
             <StatItem value={STATS.compliance} label="Compliance Rate" />
           </div>
         </div>

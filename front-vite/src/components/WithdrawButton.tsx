@@ -7,6 +7,7 @@ import { compute33 } from '../scripts/compute33.mjs'
 import { generateProof } from '../helpers/generateProof'
 import { useAccount } from 'wagmi'
 import { Button } from './ui/Button'
+import { isAddress, type Address } from 'viem'
 
 export const WithdrawButton = () => {
   const { commitmentData, decodeData, error } = useCommitmentStore()
@@ -14,6 +15,7 @@ export const WithdrawButton = () => {
   const { withdraw, isWithdrawing, isConfirmingWithdraw, isWithdrawConfirmed, withdrawError } = useSwirlPool()
   const { address } = useAccount()
   const [encodedInput, setEncodedInput] = useState('')
+  const [recipientAddress, setRecipientAddress] = useState<Address | string>('')
   const [isGeneratingProof, setIsGeneratingProof] = useState(false)
 
   // Auto-decode when input changes
@@ -27,10 +29,25 @@ export const WithdrawButton = () => {
     }
   }, [encodedInput, decodeData])
 
-  const handleWithdraw = async () => {
+  useEffect(() => {
+    setTimeout(() => {
+      if (!isAddress(recipientAddress) && recipientAddress) {
+        toast.error("Not a valid address")
+      }
+    }, 500)
+
+  }, [recipientAddress])
+
+  const handleWithdraw = async (recipientAddress?: Address | string) => {
     if (!commitmentData || !encodedInput) {
       toast.error('Please paste and decode your code first!')
       return
+    }
+
+    if (recipientAddress) {
+      if (!isAddress(recipientAddress)) {
+        return;
+      }
     }
 
     try {
@@ -87,7 +104,7 @@ export const WithdrawButton = () => {
         inputs.root_bytes32 as `0x${string}`,
         // @ts-ignore
         inputs.nullifier_hash_bytes32 as `0x${string}`,
-        address
+        recipientAddress ? recipientAddress as Address : address
       )
 
       console.log('✅ Withdrawal transaction submitted!')
@@ -126,19 +143,31 @@ export const WithdrawButton = () => {
       {/* Withdrawal code input */}
       <div className="flex flex-col gap-3">
         <label className="text-[11px] sm:text-[12px] font-semibold uppercase tracking-wider text-[#888888]">
-          Withdrawal Code
+          Encrypted Note
         </label>
+
         <textarea
           value={encodedInput}
           onChange={(e) => setEncodedInput(e.target.value)}
           placeholder="Paste the code you saved after making your deposit..."
           className="input min-h-[100px] sm:min-h-[120px] font-mono text-[11px] sm:text-xs resize-y"
         />
+
+        <label className="text-[11px] sm:text-[12px] font-semibold uppercase tracking-wider text-[#888888]">
+          Recipient Address
+        </label>
+        <textarea
+          value={recipientAddress}
+          onChange={(e) => setRecipientAddress(e.target.value)}
+          placeholder="Add the recipient Address"
+          className="input min-h-[100px] sm:min-h-[120px] font-mono text-[11px] sm:text-xs resize-y"
+        />
+
       </div>
 
       {/* Withdraw button */}
       <Button
-        onClick={handleWithdraw}
+        onClick={() => handleWithdraw(recipientAddress)}
         disabled={!commitmentData || isGeneratingProof || indexerLoading || isWithdrawing || isConfirmingWithdraw || isWithdrawConfirmed}
         variant="primary"
         isLoading={isGeneratingProof || isWithdrawing || isConfirmingWithdraw}
@@ -146,14 +175,14 @@ export const WithdrawButton = () => {
         {isGeneratingProof
           ? 'Generating Proof...'
           : isWithdrawing
-          ? 'Awaiting Wallet Approval...'
-          : isConfirmingWithdraw
-          ? 'Confirming on Blockchain...'
-          : isWithdrawConfirmed
-          ? '✓ Withdrawal Complete!'
-          : commitmentData
-          ? 'Withdraw 1 ETH'
-          : 'Paste Code First'}
+            ? 'Awaiting Wallet Approval...'
+            : isConfirmingWithdraw
+              ? 'Confirming on Blockchain...'
+              : isWithdrawConfirmed
+                ? '✓ Withdrawal Complete!'
+                : commitmentData
+                  ? 'Withdraw 1 ETH'
+                  : 'Paste Code First'}
       </Button>
 
     </div>

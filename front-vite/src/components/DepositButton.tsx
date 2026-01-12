@@ -93,7 +93,7 @@ export function DepositButton() {
         variant="primary"
         isLoading={isDepositing || isConfirming}
       >
-        {isDepositing ? 'Depositing...' : isConfirming ? 'Confirming...' : 'Deposit 1 ETH'}
+        {isDepositing ? 'Depositing...' : isConfirming ? 'Confirming...' : 'Deposit 1 MNT'}
       </Button>
 
       {/* Modal for encoded data */}
