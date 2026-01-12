@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 
-const INDEXER_URL = process.env.VITE_PONDER_API_URL || 'http://localhost:42069/graphql';
+const INDEXER_URL = process.env.VITE_PONDER_API_URL;
 
 interface Commitment {
     leafIndex: number;
@@ -20,6 +20,14 @@ export function useIndexer() {
     const fetchCommitments = useCallback(async (maxLeafIndex: number): Promise<Commitment[]> => {
         setLoading(true);
         setError(null);
+
+        if (!INDEXER_URL) {
+            const errorMsg = 'Indexer URL is not defined';
+            setError(errorMsg);
+            console.error(errorMsg);
+            setLoading(false);
+            return [];
+        }
 
         try {
             const query = `
@@ -82,6 +90,14 @@ export function useIndexer() {
     const fetchCommitmentByIndex = useCallback(async (leafIndex: number): Promise<Commitment | null> => {
         setLoading(true);
         setError(null);
+
+        if (!INDEXER_URL) {
+            const errorMsg = 'Indexer URL is not defined';
+            setError(errorMsg);
+            console.error(errorMsg);
+            setLoading(false);
+            return null;
+        }
 
         try {
             const query = `
