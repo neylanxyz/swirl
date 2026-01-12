@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 
-const INDEXER_URL = process.env.VITE_PONDER_API_URL;
+const INDEXER_URL = process.env.VITE_PONDER_API_URL || "https://swirl-production-9f99.up.railway.app";
 
 interface Commitment {
     leafIndex: number;
