@@ -1,0 +1,121 @@
+{
+	"compiler": {
+		"version": "0.8.31+commit.fd3a2265"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"name": "ConsistencyCheckFailed",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "GeminiChallengeInSubgroup",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "ProofLengthWrong",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "logN",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "actualLength",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "expectedLength",
+						"type": "uint256"
+					}
+				],
+				"name": "ProofLengthWrongWithLogN",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "PublicInputsLengthWrong",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "ShpleminiFailed",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "SumcheckFailed",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes",
+						"name": "proof",
+						"type": "bytes"
+					},
+					{
+						"internalType": "bytes32[]",
+						"name": "publicInputs",
+						"type": "bytes32[]"
+					}
+				],
+				"name": "verify",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "verified",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"circuits/swirlpool/contracts/Verifier2.sol": "HonkVerifier"
+		},
+		"evmVersion": "osaka",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 100
+		},
+		"remappings": []
+	},
+	"sources": {
+		"circuits/swirlpool/contracts/Verifier2.sol": {
+			"keccak256": "0x732c8062011adc42d7dfb7147a99983a079cc32d322dcdd5976d23418537c13b",
+			"license": "Apache-2.0",
+			"urls": [
+				"bzz-raw://16c1a37f20d2cd7925a7c2d213fe8e8a3272fe5a376c4aba269942bc8afdd0e2",
+				"dweb:/ipfs/QmVgZQBs8mpnNspvd6ZaL5TdUL4YNHT5M3xPyC4vf5Es46"
+			]
+		}
+	},
+	"version": 1
+}

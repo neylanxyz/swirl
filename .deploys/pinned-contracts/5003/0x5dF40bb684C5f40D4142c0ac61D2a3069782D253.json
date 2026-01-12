@@ -1,0 +1,40 @@
+{
+  "name": "BytecodeDeployer",
+  "address": "0x5dF40bb684C5f40D4142c0ac61D2a3069782D253",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "bytes",
+          "name": "bytecode",
+          "type": "bytes"
+        }
+      ],
+      "name": "deploy",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "addr",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "addr",
+          "type": "address"
+        }
+      ],
+      "name": "Deployed",
+      "type": "event"
+    }
+  ],
+  "filePath": "zklean/helpers/ByteCodeDeployer.sol",
+  "pinnedAt": 1767101591564
+}

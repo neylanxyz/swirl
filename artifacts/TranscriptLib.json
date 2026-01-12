@@ -1,0 +1,63 @@
+{
+	"deploy": {
+		"VM:-": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"main:1": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"sepolia:11155111": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"Custom": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		}
+	},
+	"data": {
+		"bytecode": {
+			"functionDebugData": {},
+			"generatedSources": [],
+			"linkReferences": {},
+			"object": "60556032600b8282823980515f1a607314602657634e487b7160e01b5f525f60045260245ffd5b305f52607381538281f3fe730000000000000000000000000000000000000000301460806040525f5ffdfea2646970667358221220dba5b8cabf5d294d304cb27ca97f32b2cbe3d9743f3937a24d99e6b92d229e3c64736f6c634300081f0033",
+			"opcodes": "PUSH1 0x55 PUSH1 0x32 PUSH1 0xB DUP3 DUP3 DUP3 CODECOPY DUP1 MLOAD PUSH0 BYTE PUSH1 0x73 EQ PUSH1 0x26 JUMPI PUSH4 0x4E487B71 PUSH1 0xE0 SHL PUSH0 MSTORE PUSH0 PUSH1 0x4 MSTORE PUSH1 0x24 PUSH0 REVERT JUMPDEST ADDRESS PUSH0 MSTORE PUSH1 0x73 DUP2 MSTORE8 DUP3 DUP2 RETURN INVALID PUSH20 0x0 ADDRESS EQ PUSH1 0x80 PUSH1 0x40 MSTORE PUSH0 PUSH0 REVERT INVALID LOG2 PUSH5 0x6970667358 0x22 SLT KECCAK256 0xDB 0xA5 0xB8 0xCA 0xBF TSTORE 0x29 0x4D ADDRESS 0x4C 0xB2 PUSH29 0xA97F32B2CBE3D9743F3937A24D99E6B92D229E3C64736F6C634300081F STOP CALLER ",
+			"sourceMap": "14359:12650:0:-:0;;;;;;;;;;;;;;;-1:-1:-1;;;14359:12650:0;;;;;;;;;;;;;;;;;"
+		},
+		"deployedBytecode": {
+			"functionDebugData": {},
+			"generatedSources": [],
+			"immutableReferences": {},
+			"linkReferences": {},
+			"object": "730000000000000000000000000000000000000000301460806040525f5ffdfea2646970667358221220dba5b8cabf5d294d304cb27ca97f32b2cbe3d9743f3937a24d99e6b92d229e3c64736f6c634300081f0033",
+			"opcodes": "PUSH20 0x0 ADDRESS EQ PUSH1 0x80 PUSH1 0x40 MSTORE PUSH0 PUSH0 REVERT INVALID LOG2 PUSH5 0x6970667358 0x22 SLT KECCAK256 0xDB 0xA5 0xB8 0xCA 0xBF TSTORE 0x29 0x4D ADDRESS 0x4C 0xB2 PUSH29 0xA97F32B2CBE3D9743F3937A24D99E6B92D229E3C64736F6C634300081F STOP CALLER ",
+			"sourceMap": "14359:12650:0:-:0;;;;;;;;"
+		},
+		"gasEstimates": {
+			"creation": {
+				"codeDepositCost": "17000",
+				"executionCost": "96",
+				"totalCost": "17096"
+			},
+			"internal": {
+				"generateAlphaChallenges(Fr,struct Honk.Proof memory)": "infinite",
+				"generateBetaAndGammaChallenges(Fr,struct Honk.Proof memory)": "infinite",
+				"generateEtaChallenge(struct Honk.Proof memory,bytes32[] calldata,uint256,uint256,uint256)": "infinite",
+				"generateGateChallenges(Fr)": "infinite",
+				"generateGeminiRChallenge(struct Honk.Proof memory,Fr)": "infinite",
+				"generateRelationParametersChallenges(struct Honk.Proof memory,bytes32[] calldata,uint256,uint256,uint256,Fr)": "infinite",
+				"generateRhoChallenge(struct Honk.Proof memory,Fr)": "infinite",
+				"generateShplonkNuChallenge(struct Honk.Proof memory,Fr)": "infinite",
+				"generateShplonkZChallenge(struct Honk.Proof memory,Fr)": "infinite",
+				"generateSumcheckChallenges(struct Honk.Proof memory,Fr)": "infinite",
+				"generateTranscript(struct Honk.Proof memory,bytes32[] calldata,uint256,uint256,uint256)": "infinite",
+				"loadProof(bytes calldata)": "infinite",
+				"splitChallenge(Fr)": "infinite"
+			}
+		},
+		"methodIdentifiers": {}
+	},
+	"abi": []
+}

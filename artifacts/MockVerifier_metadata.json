@@ -1,0 +1,71 @@
+{
+	"compiler": {
+		"version": "0.8.31+commit.fd3a2265"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "bytes",
+						"name": "",
+						"type": "bytes"
+					},
+					{
+						"internalType": "bytes32[]",
+						"name": "",
+						"type": "bytes32[]"
+					}
+				],
+				"name": "verify",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"notice": "Mock verifier for local testing Always returns true DO NOT USE IN PRODUCTION",
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/MockVerifier.sol": "MockVerifier"
+		},
+		"evmVersion": "osaka",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/MockVerifier.sol": {
+			"keccak256": "0x403343a11b2dfac9c714b1d4ecf81df16b709fa5472c70988921a7805ba9bd39",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://9e246412c60b2630396d8de9c710be1fad35b969f4c66742c19874dce61ab027",
+				"dweb:/ipfs/QmXPRwzEyZux9UJUx2sCvF9RCPpZuK99E3TUKd5GSHqk1s"
+			]
+		}
+	},
+	"version": 1
+}
