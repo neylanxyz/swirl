@@ -38,10 +38,8 @@ export const NAV_LINKS = [
 ] as const
 
 export const FOOTER_LINKS = [
-  { label: 'GitHub', href: '#' },
+  { label: 'GitHub', href: 'https://github.com/neylanxyz/swirl/' },
   { label: 'Documentation', href: '#' },
-  { label: 'Audits', href: '#' },
-  { label: 'Twitter', href: '#' },
 ] as const
 
 export const BREAKPOINTS = {

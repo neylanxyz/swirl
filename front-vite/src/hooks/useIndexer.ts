@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 
-const INDEXER_URL = 'http://localhost:42069/graphql';
+const INDEXER_URL = process.env.VITE_PONDER_API_URL || 'http://localhost:42069/graphql';
 
 interface Commitment {
     leafIndex: number;
