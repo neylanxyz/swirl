@@ -22,7 +22,7 @@ export function useSwirlPool() {
     functionName: 'currentRoot',
   });
 
-  const { data: nextIndex, isLoading: isLoadingIndex } = useReadContract({
+  const { data: nextIndex, isLoading: isLoadingIndex, refetch: refetchNextIndex } = useReadContract({
     address: SWIRL_PRIVATE_POOL_ADDRESS,
     abi: SWIRL_PRIVATE_POOL_ABI,
     functionName: 'nextIndex',
@@ -75,13 +75,14 @@ export function useSwirlPool() {
       throw new Error('Deposit invalid needs to add the Denomination and Protocol Fee');
     }
 
-    await writeDepositContract({
+    const data = await writeDepositContract({
       address: SWIRL_PRIVATE_POOL_ADDRESS,
       abi: SWIRL_PRIVATE_POOL_ABI,
       functionName: 'deposit',
       args: [commitment],
       value: denomination + protocolFee,
     });
+    return data
   };
 
   /**
@@ -116,6 +117,7 @@ export function useSwirlPool() {
     nextIndex,
     maxLeaves,
     isLoading: isLoadingDenomination || isLoadingRoot || isLoadingIndex || isLoadingMaxLeaves,
+    refetchNextIndex,
 
     // Deposit state
     deposit,

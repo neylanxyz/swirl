@@ -9,7 +9,7 @@ import { InfoBox } from './ui/InfoBox'
 import { Icon } from './ui/Icon'
 
 export function DepositButton() {
-  const { deposit, isDepositing, isConfirming, isConfirmed, depositError, isConnected, nextIndex } = useSwirlPool()
+  const { deposit, isDepositing, isConfirming, isConfirmed, depositError, isConnected, nextIndex, refetchNextIndex } = useSwirlPool()
   const [showModal, setShowModal] = useState(false)
   const { encodeData, encodedData } = useCommitmentStore()
 
@@ -50,12 +50,14 @@ export function DepositButton() {
     }
   }
 
-  // Show toast when deposit is confirmed
+  // Show toast when deposit is confirmed and refetch nextIndex
   useEffect(() => {
     if (isConfirmed) {
       toast.success('Deposit successful!')
+      // Refetch nextIndex to get updated value for next deposit
+      refetchNextIndex()
     }
-  }, [isConfirmed])
+  }, [isConfirmed, refetchNextIndex])
 
   // Show error toast
   useEffect(() => {
