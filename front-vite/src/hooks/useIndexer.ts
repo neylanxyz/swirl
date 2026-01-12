@@ -7,10 +7,6 @@ interface Commitment {
     commitment: string;
 }
 
-interface CommitmentsQueryResult {
-    commitments: Commitment[];
-}
-
 /**
  * Hook para buscar commitments do indexer GraphQL
  */

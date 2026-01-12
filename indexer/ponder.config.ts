@@ -13,8 +13,8 @@ export default createConfig({
     SwirlPrivatePool: {
       chain: "mantlesepolia",
       abi: SWIRL_PRIVATE_POOL_ABI,
-      address: "0xE91EAeD965BEB42854E509af76281F0BF03a648d",
-      startBlock: 33218468,
+      address: "0xDAfA37E8DA60c00F689e70fefcD06EdC1C4dACbe",
+      startBlock: 33349712,
       filter: [
         {
           event: "Deposit",

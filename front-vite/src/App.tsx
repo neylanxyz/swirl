@@ -1,74 +1,51 @@
-import './App.css'
-import { ConnectButton } from '@rainbow-me/rainbowkit'
-import { DepositButton } from './components/DepositButton'
+import { Toaster } from 'react-hot-toast'
 import { useSwirlPool } from './hooks/useSwirlPool'
-import { WithdrawButton } from './components/WithdrawButton'
-import ProofComponent from './components/Proof'
+import { Header } from './components/Header'
+import { Hero } from './components/Hero'
+import { ActionCard } from './components/ActionCard'
+import { Features } from './components/Features'
+import { Footer } from './components/Footer'
 
 function App() {
-  const { isConnected, address, currentRoot, nextIndex, denomination, isLoading } = useSwirlPool()
+  const { isConnected } = useSwirlPool()
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
-      <h1>Swirl Private Pool</h1>
-
-      <div style={{ marginBottom: '2rem' }}>
-        <ConnectButton />
-      </div>
-
-      {isConnected && address && (
-        <div style={{
-          marginBottom: '2rem',
-          padding: '1rem',
-          borderRadius: '0.5rem',
-          border: '1px solid #ddd',
+    <div className="min-h-screen h-screen flex flex-col">
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: '#141414',
+            color: '#fff',
+            border: '1px solid rgba(0, 211, 149, 0.2)',
+            borderRadius: '12px',
+            padding: '16px',
+          },
+          success: {
+            iconTheme: {
+              primary: '#00FFB3',
+              secondary: '#141414',
+            },
+          },
+          error: {
+            iconTheme: {
+              primary: '#ef4444',
+              secondary: '#141414',
+            },
+          },
         }}
-        >
-          <h2>Wallet Info</h2>
-          <p><strong>Address:</strong> {address}</p>
-          <p><strong>Chain:</strong> Mantle Sepolia Testnet</p>
-        </div>
-      )}
+      />
 
-      {isConnected && (
-        <div style={{ marginBottom: '2rem' }}>
-          <h2>Pool Status</h2>
-          {isLoading ? (
-            <p>Loading pool data...</p>
-          ) : (
-            <div style={{
-              padding: '1rem',
-              borderRadius: '0.5rem',
-              border: '1px solid #ddd'
-            }}>
-              <p><strong>Current Root:</strong> {currentRoot || 'N/A'}</p>
-              <p><strong>Next Index:</strong> {nextIndex?.toString() || 'N/A'}</p>
-              <p><strong>Denomination:</strong> {denomination ? `${denomination.toString()} wei` : 'N/A'}</p>
-            </div>
-          )}
-        </div>
-      )}
+      <Header />
 
-      {isConnected && (
-        <div>
-          <h2>Deposit</h2>
-          <DepositButton />
-          <h2>Withdraw</h2>
-          <WithdrawButton />
-          <h2>Proof</h2>
-          <ProofComponent />
-        </div>
-      )}
+      <main className="flex-1 overflow-y-auto">
+        <Hero />
+        <ActionCard isConnected={isConnected} />
+        <Features />
+        <Footer />
+      </main>
 
-      {!isConnected && (
-        <div style={{
-          padding: '1rem',
-          borderRadius: '0.5rem',
-          border: '1px solid #ffc107'
-        }}>
-          <p>Please connect your wallet to interact with the pool.</p>
-        </div>
-      )}
     </div>
   )
 }

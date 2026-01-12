@@ -28,10 +28,10 @@ export function useSwirlPool() {
     functionName: 'nextIndex',
   });
 
-  const { data: getAllFilledSubtrees, isLoading: isLoadingGetAllFilledSubtrees } = useReadContract({
+  const { data: protocolFee } = useReadContract({
     address: SWIRL_PRIVATE_POOL_ADDRESS,
     abi: SWIRL_PRIVATE_POOL_ABI,
-    functionName: 'getAllFilledSubtrees',
+    functionName: 'PROTOCOL_FEE',
   });
 
   const { data: maxLeaves, isLoading: isLoadingMaxLeaves } = useReadContract({
@@ -40,35 +40,47 @@ export function useSwirlPool() {
     functionName: 'MAX_LEAVES',
   });
 
-  // Write contract functions
+  // Write contract functions for deposit
   const {
-    writeContract,
-    data: hash,
+    writeContract: writeDepositContract,
+    data: depositHash,
     isPending: isDepositing,
     error: depositError
   } = useWriteContract();
 
-  const { isLoading: isConfirming, isSuccess: isConfirmed } =
+  const { isLoading: isConfirmingDeposit, isSuccess: isDepositConfirmed } =
     useWaitForTransactionReceipt({
-      hash,
+      hash: depositHash,
+    });
+
+  // Write contract functions for withdraw
+  const {
+    writeContract: writeWithdrawContract,
+    data: withdrawHash,
+    isPending: isWithdrawing,
+    error: withdrawError
+  } = useWriteContract();
+
+  const { isLoading: isConfirmingWithdraw, isSuccess: isWithdrawConfirmed } =
+    useWaitForTransactionReceipt({
+      hash: withdrawHash,
     });
 
   /**
    * Deposit to the pool
    * @param commitment - bytes32 commitment hash
-   * @param encryptedNote - encrypted note bytes as hex string
    */
-  const deposit = async (commitment: Address, encryptedNote: Hex) => {
-    if (!denomination) {
-      throw new Error('Denomination not loaded');
+  const deposit = async (commitment: Address) => {
+    if (!denomination || !protocolFee) {
+      throw new Error('Deposit invalid needs to add the Denomination and Protocol Fee');
     }
 
-    await writeContract({
+    await writeDepositContract({
       address: SWIRL_PRIVATE_POOL_ADDRESS,
       abi: SWIRL_PRIVATE_POOL_ABI,
       functionName: 'deposit',
-      args: [commitment, encryptedNote],
-      value: denomination,
+      args: [commitment],
+      value: denomination + protocolFee,
     });
   };
 
@@ -85,7 +97,7 @@ export function useSwirlPool() {
     nullifierHash: Address,
     recipient: Address
   ) => {
-    await writeContract({
+    await writeWithdrawContract({
       address: SWIRL_PRIVATE_POOL_ADDRESS,
       abi: SWIRL_PRIVATE_POOL_ABI,
       functionName: 'withdraw',
@@ -103,18 +115,22 @@ export function useSwirlPool() {
     currentRoot,
     nextIndex,
     maxLeaves,
-    getAllFilledSubtrees,
-    isLoading: isLoadingDenomination || isLoadingRoot || isLoadingIndex || isLoadingMaxLeaves || isLoadingGetAllFilledSubtrees,
+    isLoading: isLoadingDenomination || isLoadingRoot || isLoadingIndex || isLoadingMaxLeaves,
 
     // Deposit state
     deposit,
-    depositHash: hash,
+    depositHash,
     isDepositing,
-    isConfirming,
-    isConfirmed,
+    isConfirming: isConfirmingDeposit,
+    isConfirmed: isDepositConfirmed,
     depositError,
 
-    // Withdraw function
+    // Withdraw state
     withdraw,
+    withdrawHash,
+    isWithdrawing,
+    isConfirmingWithdraw,
+    isWithdrawConfirmed,
+    withdrawError,
   };
 }

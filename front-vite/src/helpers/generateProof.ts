@@ -81,7 +81,7 @@ export async function generateProof(proofInputs: ProofInputs): Promise<Generated
 
     // 4. Inicializar Barretenberg
     console.log("Inicializando Barretenberg...");
-    const api = await Barretenberg.new({ threads: navigator.hardwareConcurrency || 1 });
+    await Barretenberg.new({ threads: navigator.hardwareConcurrency || 1 });
 
     // 5. Inicializar backend
     console.log("Inicializando backend UltraHonk...");
