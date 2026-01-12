@@ -5,7 +5,7 @@ pragma solidity 0.8.31;
  * =================================================
  * PRIVATE MNT POOL (POSEIDON)
  * =================================================
- * - Fixed denomination: 10 MNT
+ * - Fixed denomination: 1 MNT
  * - Commit / Withdraw model
  * - Poseidon-based Merkle Tree (BN254)
  * - Nullifiers to prevent double spending
