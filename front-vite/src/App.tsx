@@ -1,18 +1,14 @@
 import { Toaster } from 'react-hot-toast'
-import { useSwirlPool } from './hooks/useSwirlPool'
 import { Header } from './components/Header'
 import { Hero } from './components/Hero'
-import { ActionCard } from './components/ActionCard'
-import { Features } from './components/Features'
 import { Footer } from './components/Footer'
 
 function App() {
-  const { isConnected } = useSwirlPool()
 
   return (
     <div className="min-h-screen h-screen flex flex-col">
       <Toaster
-        position="top-right"
+        position="bottom-right"
         toastOptions={{
           duration: 4000,
           style: {
@@ -41,8 +37,6 @@ function App() {
 
       <main className="flex-1 overflow-y-auto">
         <Hero />
-        <ActionCard isConnected={isConnected} />
-        <Features />
         <Footer />
       </main>
 

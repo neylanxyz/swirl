@@ -1,8 +1,8 @@
 import { memo } from 'react'
-import { ConnectButton } from '@rainbow-me/rainbowkit'
-import { containerPadding } from '../utils/classNames'
-import { APP_NAME, NAV_LINKS } from '../utils/constants'
+import { containerPadding } from '@/utils/classNames'
+import { APP_NAME, NAV_LINKS } from '@/utils/constants'
 import LogoImage from "../../public/logo.png"
+import { CustomConnectButton } from './CustomConnectButton'
 
 const Logo = memo(function Logo() {
   return (
@@ -26,8 +26,10 @@ const Navigation = memo(function Navigation() {
       {NAV_LINKS.map((link) => (
         <a
           key={link.label}
-          href={link.href}
+          href={link.href ?? link.externalPage}
           className="text-[13px] sm:text-[14px] text-[#888888] hover:text-[#00FFB3] transition-colors duration-200"
+          target={link.externalPage ? '_blank' : "_self"}
+          rel='noopener noreferrer'
         >
           {link.label}
         </a>
@@ -46,7 +48,7 @@ export const Header = memo(function Header() {
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-8 w-full sm:w-auto">
         <Navigation />
         <div className="w-full sm:w-auto">
-          <ConnectButton accountStatus={"address"} chainStatus={'none'} showBalance={false} />
+          <CustomConnectButton />
         </div>
       </div>
     </header>

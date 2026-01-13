@@ -32,14 +32,9 @@ export const FEATURES = [
 ] as const
 
 export const NAV_LINKS = [
-  { label: 'Docs', href: '#' },
-  { label: 'FAQ', href: '#' },
-] as const
-
-export const FOOTER_LINKS = [
-  { label: 'GitHub', href: 'https://github.com/neylanxyz/swirl/' },
-  { label: 'Documentation', href: '#' },
-] as const
+  { label: 'Docs', externalPage: 'https://github.com/neylanxyz/swirl/blob/main/README.md' },
+  { label: 'FAQ', href: '#FAQ' },
+]
 
 export const BREAKPOINTS = {
   sm: 640,

@@ -1,7 +1,7 @@
 import { memo } from 'react'
-import { containerPadding } from '../utils/classNames'
-import { APP_NAME, FOOTER_LINKS } from '../utils/constants'
+import { APP_NAME, containerPadding } from '@/utils'
 import LogoImage from "../../public/logo.png"
+import { GithubIcon } from 'lucide-react'
 
 const FooterLogo = memo(function FooterLogo() {
   return (
@@ -14,31 +14,30 @@ const FooterLogo = memo(function FooterLogo() {
   )
 })
 
-const FooterNav = memo(function FooterNav() {
-  return (
-    <nav className="flex items-center gap-6 sm:gap-8">
-      {FOOTER_LINKS.map((link) => (
-        <a
-          key={link.label}
-          href={link.href}
-          className="text-[13px] sm:text-[14px] text-[#888888] hover:text-white transition-colors duration-200"
-        >
-          {link.label}
-        </a>
-      ))}
-    </nav>
-  )
-})
-
 export const Footer = memo(function Footer() {
   return (
-    <footer className={`w-full py-10 md:py-12 border-t border-white/5 ${containerPadding}`}>
+    <footer className={`w-full py-10 md:py-12 border-t border-white/5 fixed bottom-0 ${containerPadding}`}>
       <div className="flex flex-col sm:flex-row justify-between items-center gap-6 sm:gap-8">
         <FooterLogo />
-        <FooterNav />
-        <div className="text-[13px] sm:text-[14px] text-[#666666]">
-          Powered by <span className="text-[#00FFB3]">Mantle Network</span>
+        <div className='flex gap-2 items-center'>
+          <GithubIcon className='text-[#666666] hover:text-[#00FFB3] cursor-pointer transition-colors duration-300 ease-in-out ' onClick={() => {
+            window.open(
+              "https://github.com/neylanxyz/swirl/blob/main",
+              "_blank",
+              "noreferrer noopener"
+            )
+          }} />
+          <div className="text-[13px] sm:text-[14px] text-[#666666]">
+            Powered by <span className="text-[#00FFB3] cursor-pointer hover:text-[#00FFB3]/75" onClick={() => {
+              window.open(
+                "https://www.mantle.xyz/",
+                "_blank",
+                "noreferrer noopener"
+              )
+            }} >Mantle Network</span>
+          </div>
         </div>
+
       </div>
     </footer>
   )

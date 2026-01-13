@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { cn } from '../../utils/classNames'
+import { cn } from '@/utils/classNames'
 
 interface TabButtonProps {
   label: string
@@ -18,7 +18,7 @@ export const TabButton = memo(function TabButton({
     <button
       onClick={onClick}
       className={cn(
-        'flex-1 px-6 py-5 sm:py-6 text-[14px] sm:text-[15px] font-semibold transition-all duration-200 relative',
+        'flex-1 px-6 py-5 sm:py-6 text-[14px] sm:text-[15px] font-semibold transition-all duration-200 relative cursor-pointer hover:bg-opacity-20',
         isActive ? 'text-[#00FFB3]' : 'text-[#666666] hover:text-[#888888]'
       )}
     >

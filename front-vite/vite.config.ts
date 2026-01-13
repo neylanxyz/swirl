@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import wasm from 'vite-plugin-wasm';
 import topLevelAwait from 'vite-plugin-top-level-await';
+import path from 'path';
 
 export default defineConfig({
   plugins: [
@@ -25,6 +26,7 @@ export default defineConfig({
   resolve: {
     alias: {
       pino: "pino/browser.js",
+      '@': path.resolve(__dirname, './src'),
     },
   },
   server: {

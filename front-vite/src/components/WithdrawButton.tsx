@@ -139,18 +139,18 @@ export const WithdrawButton = () => {
   }, [error])
 
   return (
-    <div className="flex flex-col gap-5 sm:gap-6 flex-1">
+    <div className="flex flex-col gap-4 sm:gap-5 flex-1">
       {/* Withdrawal code input */}
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-2.5">
         <label className="text-[11px] sm:text-[12px] font-semibold uppercase tracking-wider text-[#888888]">
-          Encrypted Note
+          Encoded Note
         </label>
 
         <textarea
           value={encodedInput}
           onChange={(e) => setEncodedInput(e.target.value)}
           placeholder="Paste the code you saved after making your deposit..."
-          className="input min-h-[100px] sm:min-h-[120px] font-mono text-[11px] sm:text-xs resize-y"
+          className="input min-h-[90px] sm:min-h-[100px] font-mono text-[11px] sm:text-xs resize-y"
         />
 
         <label className="text-[11px] sm:text-[12px] font-semibold uppercase tracking-wider text-[#888888]">
@@ -160,7 +160,7 @@ export const WithdrawButton = () => {
           value={recipientAddress}
           onChange={(e) => setRecipientAddress(e.target.value)}
           placeholder="0x..."
-          className="input min-h-[100px] sm:min-h-[120px] font-mono text-[11px] sm:text-xs resize-y"
+          className="input font-mono text-[11px] sm:text-xs resize-y"
         />
 
       </div>

@@ -1,11 +1,10 @@
-import { useState, useEffect } from 'react'
 import toast from 'react-hot-toast'
+import { useState, useEffect } from 'react'
 import { useSwirlPool } from '../hooks/useSwirlPool'
 import { getPoseidon, randField, toBytes32 } from '../helpers/zk'
 import { useCommitmentStore } from '../stores/commitmentStore'
 import { DepositSuccessModal } from './DepositSuccessModal'
 import { Button } from './ui/Button'
-import { InfoBox } from './ui/InfoBox'
 import { Icon } from './ui/Icon'
 
 export function DepositButton() {
@@ -62,7 +61,7 @@ export function DepositButton() {
   // Show error toast
   useEffect(() => {
     if (depositError) {
-      toast.error(`Deposit failed: ${depositError.message}`)
+      toast.error(`Deposit failed`)
     }
   }, [depositError])
 
@@ -74,19 +73,21 @@ export function DepositButton() {
   }, [isConfirmed, encodedData])
 
   return (
-    <div className="flex flex-col gap-5 sm:gap-6 flex-1">
-      {/* Info Box - ASP Screening */}
-      <InfoBox
-        icon={<Icon name="shield" size={18} color="#00FFB3" className="flex-shrink-0" />}
-        variant="default"
-      >
-        <div className="flex flex-col gap-2">
-          <h4 className="text-[12px] sm:text-[13px] font-semibold text-[#00FFB3]">ASP Screening Active</h4>
-          <p className="text-[11px] sm:text-[12px] text-[#888888] leading-relaxed">
-            Your deposit will be screened by the Association Set Provider. Only clean funds enter the privacy pool.
-          </p>
+    <div className="flex flex-col gap-4 sm:gap-5 flex-1">
+
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center gap-2">
+          <Icon name="shield" size={14} color="#00FFB3" className="flex-shrink-0" />
+          <h4 className="text-[11px] sm:text-[12px] font-semibold text-[#00FFB3] uppercase tracking-wider">
+            How it Works
+          </h4>
         </div>
-      </InfoBox>
+        <div className="flex flex-col gap-2 text-[10px] sm:text-[11px] text-[#888888] leading-relaxed">
+          <p>• Deposit 1 MNT to break the on-chain link between addresses</p>
+          <p>• Funds are screened by ASP to ensure compliance</p>
+          <p>• Receive an encrypted note to withdraw privately later</p>
+        </div>
+      </div>
 
       {/* Deposit Button */}
       <Button
