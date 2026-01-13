@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Icon } from './ui';
+import { ChevronDown } from 'lucide-react';
 
 // Data source for the FAQs
 const faqData = [
@@ -151,28 +152,35 @@ const faqData = [
 
 
 
-const FAQItem = ({ question, answer }: { question: string; answer: string }) => {
-    const [open, setOpen] = useState(false)
+type FAQItemProps = {
+    id: number
+    question: string
+    answer: string
+    isOpen: boolean
+    onToggle: (id: number) => void
+}
 
+const FAQItem = ({ id, question, answer, isOpen, onToggle }: FAQItemProps) => {
     return (
-        <div className="border border-white/10 rounded-xl bg-black/40 cursor-pointer">
+        <div className="border border-white/10 rounded-xl bg-black/40">
             <button
-                onClick={() => setOpen(!open)}
+                type="button"
+                onClick={() => onToggle(id)}
                 className="w-full flex items-center justify-between gap-4 px-4 py-3 text-left"
             >
                 <span className="text-[12px] sm:text-[13px] font-medium text-white">
                     {question}
                 </span>
 
-                <Icon
+                <ChevronDown
                     name="chevron-down"
                     size={14}
-                    color="#00FFB3"
-                    className={`transition-transform ${open ? 'rotate-180' : ''}`}
+                    color="#fff"
+                    className={`transition-transform ${isOpen ? 'rotate-180 transition-all duration-500' : ''}`}
                 />
             </button>
 
-            {open && (
+            {isOpen && (
                 <div className="px-4 pb-4 text-[11px] sm:text-[12px] text-[#888888] leading-relaxed">
                     {answer}
                 </div>
@@ -183,11 +191,20 @@ const FAQItem = ({ question, answer }: { question: string; answer: string }) => 
 
 
 export const FAQList = () => {
-    return (
-        <section className="max-w-[760px] mx-auto px-4 py-16 flex flex-col gap-8">
+    const [openIds, setOpenIds] = useState<number[]>([])
 
+    const handleToggle = (id: number) => {
+        setOpenIds((prev) =>
+            prev.includes(id)
+                ? prev.filter((openId) => openId !== id)
+                : [...prev, id]
+        )
+    }
+
+    return (
+        <section className="mx-auto px-4 flex flex-col gap-8">
             {/* Header */}
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-3 items-center">
                 <div className="flex items-center gap-2">
                     <Icon name="shield" size={16} color="#00FFB3" />
                     <span className="text-[11px] font-semibold uppercase tracking-wider text-[#00FFB3]">
@@ -196,25 +213,29 @@ export const FAQList = () => {
                 </div>
 
                 <h1 className="text-[22px] sm:text-[26px] font-semibold text-white">
-                    Swirl — Frequently Asked Questions
+                    Frequently Asked Questions
                 </h1>
 
-                <p className="text-[12px] sm:text-[13px] text-[#888888] max-w-[520px]">
+                <p className="text-[12px] sm:text-[13px] text-[#888888] max-w-[520px] text-center">
                     Learn how Swirl preserves privacy, how deposits and withdrawals work,
                     and what guarantees the protocol provides.
                 </p>
             </div>
 
             {/* FAQ List */}
-            <div className="flex flex-col gap-3">
+            <div className="grid grid-cols-2 gap-4 auto-rows-min items-start">
                 {faqData.map((item) => (
                     <FAQItem
                         key={item.id}
+                        id={item.id}
                         question={item.question}
                         answer={item.answer}
+                        isOpen={openIds.includes(item.id)}
+                        onToggle={handleToggle}
                     />
                 ))}
             </div>
         </section>
-    );
-};
+    )
+}
+
