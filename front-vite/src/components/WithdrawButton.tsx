@@ -8,34 +8,45 @@ import { generateProof } from '../helpers/generateProof'
 import { useAccount } from 'wagmi'
 import { Button } from './ui/Button'
 import { isAddress, type Address } from 'viem'
+import { WithdrawSuccessModal } from './WithdrawSuccessModal'
 
 export const WithdrawButton = () => {
   const { commitmentData, decodeData, error } = useCommitmentStore()
   const { fetchCommitments, loading: indexerLoading } = useIndexer()
-  const { withdraw, isWithdrawing, isConfirmingWithdraw, isWithdrawConfirmed, withdrawError } = useSwirlPool()
+  const { withdraw, isWithdrawing, isConfirmingWithdraw, isWithdrawConfirmed, withdrawError, withdrawHash } = useSwirlPool()
   const { address } = useAccount()
   const [encodedInput, setEncodedInput] = useState('')
   const [recipientAddress, setRecipientAddress] = useState<Address | string>('')
   const [isGeneratingProof, setIsGeneratingProof] = useState(false)
+  const [showModal, setShowModal] = useState(false)
 
-  // Auto-decode when input changes
+  // Auto-decode when input changes with debounce
   useEffect(() => {
-    if (encodedInput.trim()) {
+    if (!encodedInput.trim()) return
+
+    const timer = setTimeout(() => {
       try {
         decodeData(encodedInput)
       } catch (err) {
         console.error('Decoding error:', err)
+        toast.error('Invalid encoded note format')
       }
-    }
-  }, [encodedInput, decodeData])
+    }, 3000) // 3 segundos após parar de digitar
 
+    return () => clearTimeout(timer)
+  }, [encodedInput])
+
+  // Validate recipient address with debounce
   useEffect(() => {
-    setTimeout(() => {
-      if (!isAddress(recipientAddress) && recipientAddress) {
-        toast.error("Not a valid address")
-      }
-    }, 500)
+    if (!recipientAddress) return
 
+    const timer = setTimeout(() => {
+      if (!isAddress(recipientAddress)) {
+        toast.error('Not a valid address')
+      }
+    }, 3000) // 3 segundos após parar de digitar
+
+    return () => clearTimeout(timer)
   }, [recipientAddress])
 
   const handleWithdraw = async (recipientAddress?: Address | string) => {
@@ -117,12 +128,13 @@ export const WithdrawButton = () => {
     }
   }
 
-  // Show toast when withdrawal is confirmed
+  // Show modal when withdrawal is confirmed
   useEffect(() => {
-    if (isWithdrawConfirmed) {
+    if (isWithdrawConfirmed && withdrawHash) {
       toast.success('Withdrawal successful!')
+      setShowModal(true)
     }
-  }, [isWithdrawConfirmed])
+  }, [isWithdrawConfirmed, withdrawHash])
 
   // Show error toast
   useEffect(() => {
@@ -185,6 +197,13 @@ export const WithdrawButton = () => {
                   : 'Paste Code First'}
       </Button>
 
+      {/* Modal for withdrawal success */}
+      <WithdrawSuccessModal
+        recipientAddress={recipientAddress || address || ''}
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        transactionHash={withdrawHash || ''}
+      />
     </div>
   )
 }

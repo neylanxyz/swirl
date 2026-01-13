@@ -84,7 +84,6 @@ export function DepositButton() {
         </div>
         <div className="flex flex-col gap-2 text-[10px] sm:text-[11px] text-[#888888] leading-relaxed">
           <p>• Deposit 1 MNT to break the on-chain link between addresses</p>
-          <p>• Funds are screened by ASP to ensure compliance</p>
           <p>• Receive an encrypted note to withdraw privately later</p>
         </div>
       </div>
