@@ -33,7 +33,7 @@ export const FEATURES = [
 
 export const NAV_LINKS = [
   { label: 'Docs', externalPage: 'https://github.com/neylanxyz/swirl/blob/main/README.md' },
-  { label: 'FAQ', href: '#FAQ' },
+  { label: 'FAQ', href: '/FAQ' },
 ]
 
 export const BREAKPOINTS = {
