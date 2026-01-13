@@ -1,7 +1,8 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { Button } from '@/components/ui';
+import { cn } from '@/utils';
 
-export const CustomConnectButton = () => {
+export const CustomConnectButton = ({ label = "Connect Wallet", className }: { label?: string, className?: string }) => {
     return (
         <ConnectButton.Custom>
             {({
@@ -36,8 +37,8 @@ export const CustomConnectButton = () => {
                         {(() => {
                             if (!connected) {
                                 return (
-                                    <Button onClick={openConnectModal} type="button" className='p-2' variant='secondary' >
-                                        Connect Wallet
+                                    <Button onClick={openConnectModal} type="button" className={cn('p-2', className)} variant='secondary' >
+                                        {label}
                                     </Button>
                                 );
                             }
@@ -50,7 +51,7 @@ export const CustomConnectButton = () => {
                             }
                             return (
                                 <div style={{ display: 'flex', gap: 12 }}>
-                                    <button
+                                    {/* <button
                                         onClick={openChainModal}
                                         style={{ display: 'flex', alignItems: 'center' }}
                                         type="button"
@@ -75,8 +76,8 @@ export const CustomConnectButton = () => {
                                                 )}
                                             </div>
                                         )}
-                                    </button>
-                                    <Button onClick={openAccountModal} type="button" variant='secondary'>
+                                    </button> */}
+                                    <Button onClick={openAccountModal} type="button" variant='secondary' className={className}>
                                         {account.displayName}
                                     </Button>
                                 </div>

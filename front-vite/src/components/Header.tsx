@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { containerPadding } from '@/utils/classNames'
 import { APP_NAME, NAV_LINKS } from '@/utils/constants'
 import LogoImage from "../../public/logo.png"
-import { CustomConnectButton } from '@/components'
+import { CustomConnectButton, MobileSwitcher } from '@/components'
 
 const Logo = memo(function Logo() {
   return (
@@ -39,9 +39,10 @@ const Navigation = memo(function Navigation() {
 })
 
 export const Header = memo(function Header() {
+
   return (
     <header
-      className={`flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-6 py-6 sm:py-8 border-b border-white/5 bg-[#0a0a0a]/60 backdrop-blur-xl ${containerPadding}`}
+      className={`flex flex-row justify-between items-start sm:items-center gap-4 sm:gap-6 py-6 sm:py-8 border-b border-white/5 bg-[#0a0a0a]/60 backdrop-blur-xl ${containerPadding}`}
     >
       <button onClick={() => {
         window.open("/", "_self", "noreferrer noopener")
@@ -49,12 +50,14 @@ export const Header = memo(function Header() {
         <Logo />
       </button>
 
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-8 w-full sm:w-auto">
+      <div className="sm:flex flex-col  sm:flex-row items-start sm:items-center gap-4 sm:gap-8 w-full h-full sm:w-auto hidden">
+
         <Navigation />
-        <div className="w-full sm:w-auto">
+        <div className="w-full sm:w-auto hidden sm:flex">
           <CustomConnectButton />
         </div>
       </div>
+      <MobileSwitcher />
     </header>
   )
 })
