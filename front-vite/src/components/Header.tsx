@@ -43,7 +43,11 @@ export const Header = memo(function Header() {
     <header
       className={`flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-6 py-6 sm:py-8 border-b border-white/5 bg-[#0a0a0a]/60 backdrop-blur-xl ${containerPadding}`}
     >
-      <Logo />
+      <button onClick={() => {
+        window.open("/", "_self", "noreferrer noopener")
+      }} className='cursor-pointer'>
+        <Logo />
+      </button>
 
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-8 w-full sm:w-auto">
         <Navigation />

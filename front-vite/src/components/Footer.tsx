@@ -16,7 +16,7 @@ const FooterLogo = memo(function FooterLogo() {
 
 export const Footer = memo(function Footer() {
   return (
-    <footer className={`w-full py-10 md:py-12 border-t border-white/5 fixed bottom-0 ${containerPadding}`}>
+    <footer className={`w-full py-10 md:py-12 border-t border-white/5 ${containerPadding}`}>
       <div className="flex flex-col sm:flex-row justify-between items-center gap-6 sm:gap-8">
         <FooterLogo />
         <div className='flex gap-2 items-center'>

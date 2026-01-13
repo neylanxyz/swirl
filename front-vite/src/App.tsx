@@ -33,20 +33,15 @@ function App() {
       />
 
       <Header />
-
-      <main className="flex-1 overflow-y-auto">
+      <main className="flex-1">
         <BrowserRouter>
-
           <Routes>
             <Route path="/" element={<Hero />} />
             <Route path="/faq" element={<FAQList />} />
           </Routes>
-          <Footer />
         </BrowserRouter >
-
       </main>
-
-
+      <Footer />
     </div>
   )
 }
