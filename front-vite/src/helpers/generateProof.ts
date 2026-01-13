@@ -5,7 +5,7 @@ import initNoirC from "@noir-lang/noirc_abi";
 import initACVM from "@noir-lang/acvm_js";
 import acvm from "@noir-lang/acvm_js/web/acvm_js_bg.wasm?url";
 import noirc from "@noir-lang/noirc_abi/web/noirc_abi_wasm_bg.wasm?url";
-import circuitData from "../../../circuits/swirlpool/build/program.json";
+import circuitData from "../../../circuits/swirlpool/target/swirl.json";
 import { toHex } from "viem";
 
 interface ProofInputs {
