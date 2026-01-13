@@ -5,8 +5,6 @@
 export const APP_NAME = 'SWIRL'
 
 export const STATS = {
-  tvl: '$18.4M',
-  deposits: '4,889',
   compliance: '100%',
 } as const
 

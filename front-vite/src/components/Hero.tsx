@@ -48,7 +48,7 @@ export const Hero = () => {
 
           <div className="flex flex-wrap gap-8 sm:gap-12 lg:gap-16">
             <StatusItem value={balance} label="Total Value Locked" />
-            <StatusItem value={nextIndex ? nextIndex : STATS.deposits} label="Total Deposits" />
+            <StatusItem value={nextIndex} label="Total Deposits" />
             <StatusItem value={STATS.compliance} label="Compliance Rate" />
           </div>
         </div>
