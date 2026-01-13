@@ -267,10 +267,10 @@ bbup
 To generate a solidity verifier, first we need to set a Verification Key (vk):
 
 ```bash
-bb write_vk -b ./build/<noir_artifact_name>.json -o ./target --oracle_hash keccakZK
+bb write_vk -b ./target/<noir_artifact_name>.json -o ./target --oracle_hash keccak
 ```
 
-Replace `<noir_artifact_name>` with the Noir build artifact located in `./build/`, in this case `program.json`.
+Replace `<noir_artifact_name>` with the Noir build artifact located in `./target/`, in this case `swirl.json`.
 
 
 Then
