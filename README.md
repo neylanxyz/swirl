@@ -223,7 +223,6 @@ Deposits and withdrawals are unlinkable at the protocol level, but timing analys
    5. Calls `withdraw(zk_proof, root, nullifierHash, recipient)` on `SwirlPrivatePool`.
 
 ---
----
 
 ## How to deploy this myself?
 
@@ -234,6 +233,8 @@ Deposits and withdrawals are unlinkable at the protocol level, but timing analys
 - Solidity compiler > 0.8.20
 - An EVM-compatible network (local, testnet, or mainnet)
 - Basic familiarity with Noir and Solidity deployment
+
+---
 
 #### 1. Build the Noir circuit `./circuits/swirlpool/src/main.nr` and `./circuits/swirlpool/contracts/Verifier.sol`
 
@@ -281,9 +282,11 @@ bb write_solidity_verifier -k ./target/vk -o ./target/Verifier.sol
 
 to generate the solidity file.
 
-Now you can simply deploy it using Remix https://remix.ethereum.org/#lang=en or any tool you want.
+Now you can simply deploy it using Remix https://remix.ethereum.org/ or any tool you want.
 
 We recommend using Optmization with 100 runs.
+
+---
 
 #### 2. Deploy Poseidon contract
 
@@ -310,9 +313,13 @@ The Poseidon contract deployed here **must exactly match** the Poseidon paramete
 used in the Noir circuit (arity = 2, BN254).
 Any mismatch will break proof verification and compromise soundness.
 
+---
+
 #### 3. Deploy `SwirlPrivatePoolV2.sol`
 
-Deploy it passing to the constructor both the Verifier Contract address and the Poseidon contract address.
+Deploy it passing to the constructor both the Verifier Contract address and the Poseidon Contract address.
 
-#### Deploy the frontend
+---
+
+#### 4. Deploy the frontend
 
