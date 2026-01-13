@@ -166,9 +166,9 @@ const FAQItem = ({ id, question, answer, isOpen, onToggle }: FAQItemProps) => {
             <button
                 type="button"
                 onClick={() => onToggle(id)}
-                className="w-full flex items-center justify-between gap-4 px-4 py-3 text-left"
+                className="w-full flex items-center justify-between gap-4 px-4 py-3 text-left cursor-pointer group"
             >
-                <span className="text-[12px] sm:text-[13px] font-medium text-white">
+                <span className="text-[12px] sm:text-[13px] font-medium text-white group-hover:text-[#00FFB3]">
                     {question}
                 </span>
 
@@ -176,7 +176,7 @@ const FAQItem = ({ id, question, answer, isOpen, onToggle }: FAQItemProps) => {
                     name="chevron-down"
                     size={14}
                     color="#fff"
-                    className={`transition-transform ${isOpen ? 'rotate-180 transition-all duration-500' : ''}`}
+                    className={`transition-transform group-hover:opacity-50 ${isOpen ? 'rotate-180 transition-all duration-500' : ''}`}
                 />
             </button>
 
