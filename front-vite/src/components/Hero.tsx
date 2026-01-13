@@ -7,6 +7,7 @@ import { useSwirlPool } from '@/hooks/useSwirlPool'
 import { formatEther } from 'viem'
 import { StatusItem } from '@/components/ui'
 import { ActionCard } from '@/components'
+import { EncryptedText } from './EncryptedText'
 
 export const Hero = () => {
   const { isConnected } = useAccount()
@@ -36,9 +37,9 @@ export const Hero = () => {
         <div className="flex-1 flex flex-col gap-12 sm:gap-16">
           <div className="flex flex-col gap-8 sm:gap-10">
             <h2 className="heading-hero">
-              <span className="text-white">Privacy with</span>
+              <span className="text-white">  Privacy with <EncryptedText text="Compliance" />
+              </span>
               <br />
-              <span className="text-gradient">Compliance</span>
             </h2>
             <p className="text-[15px] sm:text-[16px] lg:text-[17px] text-[#888888] leading-relaxed lg:pr-8">
               The first compliant privacy pool on Mantle Network.<br /> Break the on-chain link between your addresses while
