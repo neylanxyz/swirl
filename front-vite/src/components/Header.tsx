@@ -7,7 +7,7 @@ import LogoImage from "../../public/logo.png"
 const Logo = memo(function Logo() {
   return (
     <div className="flex items-center gap-3 sm:gap-4">
-      <div className="size-12 sm:size-14 md:size-40 flex-shrink-0 " >
+      <div className="size-12 sm:size-14 md:size-22 flex-shrink-0 " >
         <img src={LogoImage} alt="SWIRL Logo" className="w-full h-full object-contain" />
       </div>
       <div className="flex items-center gap-2 sm:gap-3">
@@ -27,7 +27,7 @@ const Navigation = memo(function Navigation() {
         <a
           key={link.label}
           href={link.href}
-          className="text-[13px] sm:text-[14px] text-[#888888] hover:text-white transition-colors duration-200"
+          className="text-[13px] sm:text-[14px] text-[#888888] hover:text-[#00FFB3] transition-colors duration-200"
         >
           {link.label}
         </a>
@@ -46,7 +46,7 @@ export const Header = memo(function Header() {
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-8 w-full sm:w-auto">
         <Navigation />
         <div className="w-full sm:w-auto">
-          <ConnectButton />
+          <ConnectButton accountStatus={"address"} chainStatus={'none'} showBalance={false} />
         </div>
       </div>
     </header>

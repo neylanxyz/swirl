@@ -33,7 +33,6 @@ export const FEATURES = [
 
 export const NAV_LINKS = [
   { label: 'Docs', href: '#' },
-  { label: 'Stats', href: '#' },
   { label: 'FAQ', href: '#' },
 ] as const
 

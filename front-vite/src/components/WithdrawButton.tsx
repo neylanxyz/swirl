@@ -159,7 +159,7 @@ export const WithdrawButton = () => {
         <textarea
           value={recipientAddress}
           onChange={(e) => setRecipientAddress(e.target.value)}
-          placeholder="Add the recipient Address"
+          placeholder="0x..."
           className="input min-h-[100px] sm:min-h-[120px] font-mono text-[11px] sm:text-xs resize-y"
         />
 
