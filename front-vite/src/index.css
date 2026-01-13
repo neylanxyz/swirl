@@ -70,6 +70,26 @@
    COMPONENT CLASSES (CSS)
    ========================================== */
 
+.loader-btn {
+  width: 18px;
+  aspect-ratio: 1;
+  --g: conic-gradient(from -90deg at 2.66px 2.66px, #000 90deg, #0000 0);
+  background: var(--g), var(--g), var(--g);
+  background-size: 50% 50%;
+  animation: l18 1s infinite;
+}
+@keyframes l18 {
+  0% {
+    background-position: 0 0, 2.66px 2.66px, 6px 6px;
+  }
+  50% {
+    background-position: 0 6px, 2.66px 2.66px, 6px 0;
+  }
+  100% {
+    background-position: 6px 6px, 2.66px 2.66px, 0 0;
+  }
+}
+
 .loader {
   width: 54px;
   aspect-ratio: 1;

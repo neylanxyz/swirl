@@ -7,7 +7,7 @@ import { generateProof } from '@/helpers/generateProof'
 import { useAccount } from 'wagmi'
 import { Button } from '@/components/ui'
 import { isAddress, type Address } from 'viem'
-import { WithdrawSuccessModal } from '@/components'
+import { WithdrawSuccessModal, WithdrawButtonLabel } from '@/components'
 
 export const WithdrawButton = () => {
   const { commitmentData, decodeData, error } = useCommitmentStore()
@@ -138,7 +138,7 @@ export const WithdrawButton = () => {
   // Show error toast
   useEffect(() => {
     if (withdrawError) {
-      toast.error(`Withdrawal failed: ${withdrawError.message}`)
+      toast.error(`Withdrawal failed`)
     }
   }, [withdrawError])
 
@@ -183,17 +183,13 @@ export const WithdrawButton = () => {
         variant="primary"
         isLoading={isGeneratingProof || isWithdrawing || isConfirmingWithdraw}
       >
-        {isGeneratingProof
-          ? 'Generating Proof...'
-          : isWithdrawing
-            ? 'Awaiting Wallet Approval...'
-            : isConfirmingWithdraw
-              ? 'Confirming on Blockchain...'
-              : isWithdrawConfirmed
-                ? '✓ Withdrawal Complete!'
-                : commitmentData
-                  ? 'Withdraw 1 ETH'
-                  : 'Paste Code First'}
+        <WithdrawButtonLabel
+          isGeneratingProof={isGeneratingProof}
+          isWithdrawing={isWithdrawing}
+          isConfirmingWithdraw={isConfirmingWithdraw}
+          isWithdrawConfirmed={isWithdrawConfirmed}
+          commitmentData={commitmentData}
+        />
       </Button>
 
       {/* Modal for withdrawal success */}

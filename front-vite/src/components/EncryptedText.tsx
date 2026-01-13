@@ -1,5 +1,6 @@
 "use client"
 
+import { cn } from "@/utils"
 import { useEffect, useState } from "react"
 
 const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#$%"
@@ -14,7 +15,7 @@ function encryptText(text: string, frame: number) {
         .join("")
 }
 
-export function EncryptedText({ text }: { text: string }) {
+export function EncryptedText({ text, className }: { text: string, className?: string }) {
     const [display, setDisplay] = useState(text)
 
     useEffect(() => {
@@ -33,7 +34,7 @@ export function EncryptedText({ text }: { text: string }) {
     }, [text])
 
     return (
-        <span className="font-bold text-[#00FFB3] tracking-wide">
+        <span className={cn("font-bold text-[#00FFB3] tracking-wide", className)}>
             {display}
         </span>
     )
