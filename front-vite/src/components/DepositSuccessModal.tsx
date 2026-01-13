@@ -1,5 +1,6 @@
 import { useCommitmentStore } from '../stores/commitmentStore'
 import { Button, Icon } from '@/components/ui'
+import { AlertTriangleIcon } from 'lucide-react'
 import { createPortal } from 'react-dom'
 
 interface DepositSuccessModalProps {
@@ -50,11 +51,10 @@ export function DepositSuccessModal({ isOpen, onClose, encodedData }: DepositSuc
           <button
             onClick={handleClose}
             disabled={!copySuccess}
-            className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all ${
-              copySuccess
-                ? 'hover:bg-white/5 text-[#888888] hover:text-white cursor-pointer'
-                : 'text-[#444444] cursor-not-allowed opacity-40'
-            }`}
+            className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all ${copySuccess
+              ? 'hover:bg-white/5 text-[#888888] hover:text-white cursor-pointer'
+              : 'text-[#444444] cursor-not-allowed opacity-40'
+              }`}
             title={copySuccess ? 'Close' : 'Copy the code first to close'}
           >
             <Icon name="x" size={16} />
@@ -65,7 +65,7 @@ export function DepositSuccessModal({ isOpen, onClose, encodedData }: DepositSuc
         <div className="p-6 sm:p-7 flex flex-col gap-5">
           {/* Warning */}
           <div className="flex items-start gap-3 p-4 rounded-lg bg-red-500/5 border border-red-500/15">
-            <span className="text-red-400 text-[14px] flex-shrink-0 mt-0.5">⚠️</span>
+            <span className="text-red-400 text-[14px] flex-shrink-0"><AlertTriangleIcon className='text-red-400 text-[14px]' /></span>
             <p className="text-[12px] sm:text-[13px] text-[#888888] leading-relaxed">
               Without this code you will <span className="text-red-300 font-medium">never</span> be able to withdraw your funds.
               Save it securely.
