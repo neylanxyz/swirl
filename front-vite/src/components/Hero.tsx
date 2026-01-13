@@ -54,7 +54,7 @@ export const Hero = () => {
         </div>
 
         <div className="w-full lg:w-[520px] xl:w-[560px] lg:flex-shrink-0">
-          <ActionCard isConnected={isConnected} compact />
+          <ActionCard isConnected={isConnected} />
         </div>
       </div>
     </section>
