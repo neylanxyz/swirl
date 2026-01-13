@@ -13,22 +13,19 @@ export const TheHeaderMobile: React.FC<TheHeaderMobileProps> = ({
     isOpen,
     toggleMenu,
 }) => {
+    useEffect(() => {
+        if (isOpen) {
+            document.body.classList.add("overflow-hidden");
+        } else {
+            document.body.classList.remove("overflow-hidden");
+        }
+
+        return () => {
+            document.body.classList.remove("overflow-hidden");
+        };
+    }, [isOpen]);
+
     if (!isOpen) return null;
-
-    function useLockBodyScroll(isLocked: boolean) {
-        useEffect(() => {
-            if (isLocked) {
-                document.body.classList.add("overflow-hidden");
-            } else {
-                document.body.classList.remove("overflow-hidden");
-            }
-
-            return () => {
-                document.body.classList.remove("overflow-hidden");
-            };
-        }, [isLocked]);
-    }
-    useLockBodyScroll(isOpen);
 
 
     return createPortal(
