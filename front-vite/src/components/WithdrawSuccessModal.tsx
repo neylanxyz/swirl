@@ -1,7 +1,7 @@
 import { Button, Icon } from '@/components/ui'
 import { createPortal } from 'react-dom'
 import { zeroAddress, type Address } from 'viem'
-import { CopyAndPasteButton } from './CopyAndPasteButton'
+import { CopyAndPasteButton } from '@/components'
 
 interface WithdrawSuccessModalProps {
   isOpen: boolean

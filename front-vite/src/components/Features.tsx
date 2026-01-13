@@ -1,6 +1,6 @@
 import { memo } from 'react'
-import { containerPadding } from '../utils/classNames'
-import { Icon } from './ui/Icon'
+import { containerPadding } from '@/utils/classNames'
+import { Icon } from '@/components/ui'
 
 interface FeatureProps {
   icon: React.ReactNode

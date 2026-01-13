@@ -82,7 +82,7 @@ function insertLeaf(poseidon, leaf, leafIndex, zeros, filledSubtrees) {
  * @param {string} encodedData - Código base64 com secret, nullifier e leafIndex do usuário
  * @returns {Object} Objeto com todos os dados formatados para usar no Proof.tsx
  */
-export async function compute33(commitments, encodedData) {
+export async function compute(commitments, encodedData) {
     const poseidon = await buildPoseidon();
 
     // ===== 1. Decodificar dados do usuário =====

@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useAccount } from 'wagmi'
-import { containerPadding } from '../utils/classNames'
-import { STATS } from '../utils/constants'
-import { SWIRL_PRIVATE_POOL_ADDRESS } from '../helpers/contract'
-import { publicClient } from '../config/client'
-import { useSwirlPool } from '../hooks/useSwirlPool'
+import { STATS, containerPadding } from '@/utils'
+import { SWIRL_PRIVATE_POOL_ADDRESS } from '@/helpers/contract'
+import { publicClient } from '@/config/client'
+import { useSwirlPool } from '@/hooks/useSwirlPool'
 import { formatEther } from 'viem'
-import { StatusItem } from './ui/StatusItem'
-import { ActionCard } from './ActionCard'
+import { StatusItem } from '@/components/ui'
+import { ActionCard } from '@/components'
 
 export const Hero = () => {
   const { isConnected } = useAccount()

@@ -1,4 +1,4 @@
-import { useCommitmentStore } from '../stores/commitmentStore'
+import { useCommitmentStore } from '@/stores/commitmentStore'
 import { Button, Icon } from '@/components/ui'
 import { AlertTriangleIcon } from 'lucide-react'
 import { createPortal } from 'react-dom'

@@ -47,8 +47,8 @@ export async function initializeWasm() {
 }
 
 /**
- * Gera uma proof ZK a partir dos inputs do compute33
- * @param proofInputs - Dados retornados pelo compute33
+ * Gera uma proof ZK a partir dos inputs do compute
+ * @param proofInputs - Dados retornados pelo compute
  * @returns Proof formatada para enviar ao contrato
  */
 export async function generateProof(proofInputs: ProofInputs): Promise<GeneratedProof> {

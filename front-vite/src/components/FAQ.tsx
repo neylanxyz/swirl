@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Icon } from './ui';
+import { Icon } from '@/components/ui';
 import { ChevronDown } from 'lucide-react';
 
 // Data source for the FAQs

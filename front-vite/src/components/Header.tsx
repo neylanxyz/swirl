@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { containerPadding } from '@/utils/classNames'
 import { APP_NAME, NAV_LINKS } from '@/utils/constants'
 import LogoImage from "../../public/logo.png"
-import { CustomConnectButton } from './CustomConnectButton'
+import { CustomConnectButton } from '@/components'
 
 const Logo = memo(function Logo() {
   return (

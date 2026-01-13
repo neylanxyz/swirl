@@ -1,11 +1,10 @@
 import toast from 'react-hot-toast'
 import { useState, useEffect } from 'react'
-import { useSwirlPool } from '../hooks/useSwirlPool'
-import { getPoseidon, randField, toBytes32 } from '../helpers/zk'
-import { useCommitmentStore } from '../stores/commitmentStore'
-import { DepositSuccessModal } from './DepositSuccessModal'
-import { Button } from './ui/Button'
-import { Icon } from './ui/Icon'
+import { useSwirlPool } from '@/hooks/useSwirlPool'
+import { getPoseidon, randField, toBytes32 } from '@/helpers/zk'
+import { useCommitmentStore } from '@/stores/commitmentStore'
+import { DepositSuccessModal } from '@/components'
+import { Button, Icon } from '@/components/ui'
 
 export function DepositButton() {
   const { deposit, isDepositing, isConfirming, isConfirmed, depositError, isConnected, nextIndex, refetchNextIndex } = useSwirlPool()

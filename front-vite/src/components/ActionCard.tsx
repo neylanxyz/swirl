@@ -1,9 +1,7 @@
 import { useState, memo } from 'react'
-import { DepositButton } from './DepositButton'
-import { WithdrawButton } from './WithdrawButton'
-import { TabButton } from './ui/TabButton'
-import { Icon } from './ui/Icon'
-import { cn, containerPadding } from '../utils/classNames'
+import { DepositButton, WithdrawButton } from '@/components'
+import { Icon, TabButton } from '@/components/ui'
+import { cn, containerPadding } from '@/utils/classNames'
 
 interface ActionCardProps {
   isConnected: boolean

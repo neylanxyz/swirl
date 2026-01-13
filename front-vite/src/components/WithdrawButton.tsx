@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react'
 import toast from 'react-hot-toast'
-import { useCommitmentStore } from '../stores/commitmentStore'
-import { useIndexer } from '../hooks/useIndexer'
-import { useSwirlPool } from '../hooks/useSwirlPool'
-import { compute33 } from '../scripts/compute33.mjs'
-import { generateProof } from '../helpers/generateProof'
+import { useCommitmentStore } from '@/stores/commitmentStore'
+import { useIndexer, useSwirlPool } from '@/hooks'
+import { compute } from '@/scripts/compute.mjs'
+import { generateProof } from '@/helpers/generateProof'
 import { useAccount } from 'wagmi'
-import { Button } from './ui/Button'
+import { Button } from '@/components/ui'
 import { isAddress, type Address } from 'viem'
-import { WithdrawSuccessModal } from './WithdrawSuccessModal'
+import { WithdrawSuccessModal } from '@/components'
 
 export const WithdrawButton = () => {
   const { commitmentData, decodeData, error } = useCommitmentStore()
@@ -85,11 +84,11 @@ export const WithdrawButton = () => {
       // 2. Convert to commitment strings array
       const commitments = deposits.map((d) => d.commitment)
 
-      // 3. Generate proof inputs with compute33
+      // 3. Generate proof inputs with compute
       console.log('\n🌳 Generating proof inputs...')
 
-      // @ts-ignore - compute33.mjs exports function with 2 parameters
-      const inputs = await compute33(commitments, encodedInput)
+      // @ts-ignore - compute.mjs exports function with 2 parameters
+      const inputs = await compute(commitments, encodedInput)
 
       console.log('✅ Proof inputs generated successfully!')
 
