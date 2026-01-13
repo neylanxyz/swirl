@@ -1,7 +1,6 @@
 import { Toaster } from 'react-hot-toast'
-import { Header } from './components/Header'
-import { Hero } from './components/Hero'
-import { Footer } from './components/Footer'
+import { Header, Hero, Footer, FAQList } from '@/components'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
 
@@ -36,9 +35,17 @@ function App() {
       <Header />
 
       <main className="flex-1 overflow-y-auto">
-        <Hero />
-        <Footer />
+        <BrowserRouter>
+
+          <Routes>
+            <Route path="/" element={<Hero />} />
+            <Route path="/faq" element={<FAQList />} />
+          </Routes>
+          <Footer />
+        </BrowserRouter >
+
       </main>
+
 
     </div>
   )

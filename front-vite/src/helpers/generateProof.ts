@@ -95,7 +95,6 @@ export async function generateProof(proofInputs: ProofInputs): Promise<Generated
     // 7. Gerar proof
     console.log("\nGerando proof ZK...");
     const proof = await backend.generateProof(witness, { keccakZK: true });
-    console.log("✓ Proof gerada");
 
     // 8. Verificar proof localmente
     console.log("\nVerificando proof localmente...");
@@ -118,4 +117,47 @@ export async function generateProof(proofInputs: ProofInputs): Promise<Generated
     console.log("=========================================\n");
 
     return formattedProof;
+}
+
+// ================================
+// Format deposit info to exact output format
+// ================================
+export function formatDepositInfo(depositInfo: {
+    secret: string;
+    nullifier: string;
+    commitment: string;
+    nullifier_hash: string;
+    nullifier_hash_bytes32: string;
+    leafIndex: string;
+    currentRoot: string | undefined;
+    "root (computed)": string;
+    "root (bytes32)": string;
+    merkle_path: string[];
+    merkle_indices: bigint[];
+}): string {
+    let output = '';
+
+    output += `secret= "${depositInfo.secret}"\n`;
+    output += `nullifier= "${depositInfo.nullifier}"\n`;
+    output += `commitment= "${depositInfo.commitment}"\n`;
+    output += `nullifier_hash= "${depositInfo.nullifier_hash}"\n`;
+    output += `nullifier_hash_bytes32= "${depositInfo.nullifier_hash_bytes32}"\n`;
+    output += `leafIndex= "${depositInfo.leafIndex}"\n`;
+    output += `currentRoot= "${depositInfo.currentRoot || ''}"\n`;
+    output += `root= "${depositInfo["root (computed)"]}"\n`;
+    output += `rootbytes32= "${depositInfo["root (bytes32)"]}"\n`;
+
+    output += `merkle_path= [\n`;
+    depositInfo.merkle_path.forEach(v => {
+        output += `  "${v}",\n`;
+    });
+    output += `]\n`;
+
+    output += `merkle_indices= [\n`;
+    depositInfo.merkle_indices.forEach(i => {
+        output += `  "${i.toString()}",\n`;
+    });
+    output += `]`;
+
+    return output;
 }
