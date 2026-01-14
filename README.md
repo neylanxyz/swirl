@@ -231,11 +231,6 @@ end
 
 A6 -.->|Note used for withdrawal| B1
 
-style Deposit fill:#e1f5ff,stroke:#0066cc,stroke-width:2px
-style Withdraw fill:#fff4e1,stroke:#cc6600,stroke-width:2px
-style A4 fill:#90EE90,stroke:#006400,stroke-width:2px
-style B5 fill:#90EE90,stroke:#006400,stroke-width:2px
-
 ### Deposit Flow
 
 1.  The app generates `secret` and `nullifier` locally.
