@@ -15,7 +15,7 @@ function textWithdrawLabels({ step }: { step: WithdrawStep }) {
     case WithdrawStep.GENERATING_INPUTS:
       return "Calculating Merkle tree path..."
     case WithdrawStep.GENERATING_PROOF:
-      return "Generating ZK Proof ( this can take a while )..."
+      return "Generating ZK Proof (can take a while)..."
     case WithdrawStep.AWAITING_SIGNATURE:
       return "Awaiting Signature..."
     case WithdrawStep.SENDING_TRANSACTION:
