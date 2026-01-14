@@ -203,6 +203,12 @@ Deposits and withdrawals are unlinkable at the protocol level, but timing analys
 
 ## Architecture Overview
 
+<img 
+  src="./docs/architecture.png" 
+  alt="Deposit and Withdraw Flow"
+  width="100%"
+/>
+
 ### Deposit Flow
 
 1.  The app generates `secret` and `nullifier` locally.
@@ -377,31 +383,3 @@ pnpm run dev
 3. Check the GraphQL indexer (production):
 
 [https://swirl-production-9f99.up.railway.app/](https://swirl-production-9f99.up.railway.app/)
-
-flowchart TB
-
-subgraph Deposit["Deposit Flow"]
-A1[User initiates deposit]
-A2[App generates secret & nullifier locally]
-A3["Compute commitment<br/>Poseidon(secret, nullifier)"]
-A4["Call deposit(commitment)<br/>on SwirlPrivatePool"]
-A5["Generate base64 encoded note<br/>(secret, nullifier, leafIndex)"]
-A6[User saves note for withdrawal]
-
-    A1 --> A2 --> A3 --> A4 --> A5 --> A6
-
-end
-
-subgraph Withdraw["Withdraw Flow"]
-B1[User pastes encoded note]
-B2[User pastes recipient address]
-B3["App computes merklePath<br/>& merkleIndices from<br/>previous commitments"]
-B4["Generate ZK Proof using:<br/>secret, nullifier, merklePath,<br/>merkleIndices, root, nullifierHash"]
-B5["Call withdraw(zk_proof, root,<br/>nullifierHash, recipient)<br/>on SwirlPrivatePool"]
-B6[Funds sent to recipient]
-
-    B1 --> B2 --> B3 --> B4 --> B5 --> B6
-
-end
-
-A6 -.->|Note used for withdrawal| B1
