@@ -6,8 +6,9 @@ import { compute } from '@/scripts/compute.mjs'
 import { generateProof } from '@/helpers/generateProof'
 import { useAccount } from 'wagmi'
 import { Button } from '@/components/ui'
-import { BaseError, ContractFunctionRevertedError, isAddress, type Address } from 'viem'
+import { isAddress, type Address } from 'viem'
 import { WithdrawSuccessModal, WithdrawButtonLabel } from '@/components'
+import { parseViemError } from '@/helpers/parseViemError'
 
 export const WithdrawButton = () => {
   const { commitmentData, decodeData, error } = useCommitmentStore()
@@ -50,7 +51,7 @@ export const WithdrawButton = () => {
 
   const handleWithdraw = async (recipientAddress?: Address | string) => {
     if (!commitmentData || !encodedInput) {
-      toast.error('Please paste and decode your code first!')
+      toast.error('Please paste your encoded note first!')
       return
     }
 
@@ -120,18 +121,27 @@ export const WithdrawButton = () => {
       console.log('✅ Withdrawal transaction submitted!')
       toast.success('Transaction sent! Waiting for confirmation...')
     } catch (err) {
-      if (err instanceof BaseError) {
-        const revertError = err.walk(err => err instanceof ContractFunctionRevertedError)
-        if (revertError instanceof ContractFunctionRevertedError) {
-          const errorName = revertError.data?.errorName ?? ''
-          if (errorName === "NullifierAlreadyUsed") {
-            toast.error("Nullifer already used.")
-          }
-        }
-      } else {
-        toast.error('Unknown error')
+
+      const parsed = parseViemError(err);
+
+      if (parsed.type === 'user_rejected') {
+        toast.error('User rejected the transaction.');
+        return;
       }
+
+      if (parsed.errorName === "NullifierAlreadyUsed") {
+        toast.error("Nullifer already used.")
+      }
+
+      if (parsed.type === 'revert') {
+        if (parsed.reason === 'recipient sanctioned') {
+          toast.error('Can not withdraw to a Blacklisted address.');
+          return;
+        }
+      }
+
       console.error('❌ Error:', err)
+
     } finally {
       setIsGeneratingProof(false)
       console.log("finally")

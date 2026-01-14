@@ -5,6 +5,7 @@ import { getPoseidon, randField, toBytes32 } from '@/helpers/zk'
 import { useCommitmentStore } from '@/stores/commitmentStore'
 import { DepositSuccessModal, DepositButtonLabel } from '@/components'
 import { Button, Icon } from '@/components/ui'
+import { parseViemError } from '@/helpers/parseViemError'
 
 export function DepositButton() {
   const { deposit, isDepositing, isConfirming, isConfirmed: isDepositConfirmed, depositError, isConnected, nextIndex, refetchNextIndex } = useSwirlPool()
@@ -43,8 +44,22 @@ export function DepositButton() {
 
       toast.success('Transaction sent! Waiting for confirmation...')
     } catch (err) {
-      console.error('Deposit error:', err)
-      toast.error(err instanceof Error ? err.message : 'Unknown error')
+      const parsed = parseViemError(err);
+
+      if (parsed.type === 'user_rejected') {
+        toast.error('User rejected the transaction.');
+        return;
+      }
+
+      if (parsed.type === 'revert') {
+        if (parsed.reason === 'this address is blacklisted and cannot deposit') {
+          toast.error('Blacklisted address.');
+          return;
+        }
+      }
+
+      toast.error('Unknown error');
+      console.log("erorr", err)
     }
   }
 

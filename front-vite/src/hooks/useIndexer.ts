@@ -1,6 +1,5 @@
 import { useState, useCallback } from 'react';
-
-const INDEXER_URL = process.env.VITE_PONDER_API_URL || "https://swirl-production-9f99.up.railway.app";
+import { INDEXER } from "@/config/environmentVars"
 
 interface Commitment {
     leafIndex: number;
@@ -21,7 +20,7 @@ export function useIndexer() {
         setLoading(true);
         setError(null);
 
-        if (!INDEXER_URL) {
+        if (!INDEXER.API_URL) {
             const errorMsg = 'Indexer URL is not defined';
             setError(errorMsg);
             console.error(errorMsg);
@@ -45,7 +44,7 @@ export function useIndexer() {
                 }
             `;
 
-            const response = await fetch(INDEXER_URL, {
+            const response = await fetch(INDEXER.API_URL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -91,7 +90,7 @@ export function useIndexer() {
         setLoading(true);
         setError(null);
 
-        if (!INDEXER_URL) {
+        if (!INDEXER.API_URL) {
             const errorMsg = 'Indexer URL is not defined';
             setError(errorMsg);
             console.error(errorMsg);
@@ -109,7 +108,7 @@ export function useIndexer() {
                 }
             `;
 
-            const response = await fetch(INDEXER_URL, {
+            const response = await fetch(INDEXER.API_URL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

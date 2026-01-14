@@ -81,14 +81,20 @@ export function useSwirlPool() {
       throw new Error('Deposit invalid needs to add the Denomination and Protocol Fee');
     }
 
-    const data = await writeDepositContract({
+    if (!walletClient.data) {
+      throw new Error('Wallet client not connected');
+    }
+
+    const { request } = await simulateContract(publicClient, {
       address: SWIRL_PRIVATE_POOL_ADDRESS,
       abi: SWIRL_PRIVATE_POOL_ABI,
       functionName: 'deposit',
       args: [commitment],
       value: denomination + protocolFee,
+      account: address,
     });
-    return data
+
+    return await writeContract(walletClient.data, request);
   };
 
   /**
@@ -113,7 +119,7 @@ export function useSwirlPool() {
       abi: SWIRL_PRIVATE_POOL_ABI,
       functionName: 'withdraw',
       args: [proof, root, nullifierHash, recipient],
-      account: recipient,
+      account: address,
     });
 
     return await writeContract(walletClient.data, request);
