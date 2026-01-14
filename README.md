@@ -318,14 +318,62 @@ Deploy it passing to the constructor both the Verifier Contract address and the 
 
 #### 4. Deploy the frontend
 
-```js
+1. Install dependencies:
+
+```bash
 pnpm install
+```
+
+2. Run the development server:
+
+```bash
 pnpm run dev
 ```
 
-#### 4. Deploy the indexer
+3. Copy the environment file:
 
-```js
+```bash
+cp .env.example .env
+```
+
+4. Configure the environment variables in `.env`:
+
+```env
+VITE_PUBLIC_ENV="development" # Use "development" or "production"
+```
+
+**VITE_API explanation:**
+
+- **Production:**
+
+```env
+VITE_API="https://swirl-production-9f99.up.railway.app/"
+```
+
+- **Development:**
+
+```env
+VITE_API="http://localhost:<PORT>/"
+```
+
+> For development, you need to run the local indexer first, so the frontend can fetch data.
+
+---
+
+#### 5. Deploy the indexer
+
+1. Install dependencies:
+
+```bash
 pnpm install
+```
+
+2. Run the indexer:
+
+```bash
 pnpm run dev
 ```
+
+3. Check the GraphQL indexer (production):
+
+[https://swirl-production-9f99.up.railway.app/](https://swirl-production-9f99.up.railway.app/)
