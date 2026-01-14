@@ -223,7 +223,7 @@ export const FAQList = () => {
             </div>
 
             {/* FAQ List */}
-            <div className="grid grid-cols-2 gap-4 auto-rows-min items-start">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 auto-rows-min items-start">
                 {faqData.map((item) => (
                     <FAQItem
                         key={item.id}
