@@ -13,7 +13,7 @@ import { parseViemError } from '@/helpers/parseViemError'
 export const WithdrawButton = () => {
   const { commitmentData, decodeData, error } = useCommitmentStore()
   const { fetchCommitments, loading: indexerLoading } = useIndexer()
-  const { withdraw, isWithdrawing, isConfirmingWithdraw, isWithdrawConfirmed, withdrawError, withdrawHash } = useSwirlPool()
+  const { withdraw, isWithdrawing, isWithdrawConfirming, isWithdrawConfirmed, isWithdrawError, withdrawTxHash } = useSwirlPool()
   const { address } = useAccount()
   const [encodedInput, setEncodedInput] = useState('')
   const [recipientAddress, setRecipientAddress] = useState<Address | string>('')
@@ -150,18 +150,11 @@ export const WithdrawButton = () => {
 
   // Show modal when withdrawal is confirmed
   useEffect(() => {
-    if (isWithdrawConfirmed && withdrawHash) {
+    if (isWithdrawConfirmed && withdrawTxHash) {
       toast.success('Withdrawal successful!')
       setShowModal(true)
     }
-  }, [isWithdrawConfirmed, withdrawHash])
-
-  // Show error toast
-  useEffect(() => {
-    if (withdrawError) {
-      toast.error(`Withdrawal failed`)
-    }
-  }, [withdrawError])
+  }, [isWithdrawConfirmed, withdrawTxHash])
 
   // Show error toast for decoding errors
   useEffect(() => {
@@ -200,14 +193,14 @@ export const WithdrawButton = () => {
       {/* Withdraw button */}
       <Button
         onClick={() => handleWithdraw(recipientAddress)}
-        disabled={!commitmentData || isGeneratingProof || indexerLoading || isWithdrawing || isConfirmingWithdraw || isWithdrawConfirmed}
+        disabled={!commitmentData || isGeneratingProof || indexerLoading || isWithdrawing || isWithdrawConfirming || isWithdrawConfirmed}
         variant="primary"
-        isLoading={isGeneratingProof || isWithdrawing || isConfirmingWithdraw}
+        isLoading={isGeneratingProof || isWithdrawing || isWithdrawConfirming}
       >
         <WithdrawButtonLabel
           isGeneratingProof={isGeneratingProof}
           isWithdrawing={isWithdrawing}
-          isConfirmingWithdraw={isConfirmingWithdraw}
+          isWithdrawConfirming={isWithdrawConfirming}
           isWithdrawConfirmed={isWithdrawConfirmed}
           commitmentData={commitmentData}
         />
@@ -218,7 +211,7 @@ export const WithdrawButton = () => {
         recipientAddress={recipientAddress || address || ''}
         isOpen={showModal}
         onClose={() => setShowModal(false)}
-        transactionHash={withdrawHash || ''}
+        transactionHash={withdrawTxHash || ''}
       />
     </div>
   )

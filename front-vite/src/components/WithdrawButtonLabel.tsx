@@ -1,49 +1,26 @@
-import { EncryptedText } from "@/components"
+import { Label } from "@/components"
 
 export function WithdrawButtonLabel({
     isGeneratingProof,
     isWithdrawing,
-    isConfirmingWithdraw,
+    isWithdrawConfirming,
     isWithdrawConfirmed,
     commitmentData,
 }: any) {
+
     if (isGeneratingProof)
         return (
-            <span className="flex items-center gap-2 text-black">
-                <span className="loader-btn" />
-                <span className="fade-text">
-                    <EncryptedText
-                        text="Generating Proof"
-                        className="text-black!"
-                    />
-                </span>
-            </span>
+            <Label text="Generating Proof" />
         )
 
     if (isWithdrawing)
         return (
-            <span className="flex items-center gap-2 text-black">
-                <span className="loader-btn" />
-                <span className="fade-text">
-                    <EncryptedText
-                        text="Awaiting Wallet Approval"
-                        className="text-black!"
-                    />
-                </span>
-            </span>
+            <Label text="Awaiting Wallet Approval" />
         )
 
-    if (isConfirmingWithdraw)
+    if (isWithdrawConfirming)
         return (
-            <span className="flex items-center gap-2 text-black">
-                <span className="loader-btn" />
-                <span className="fade-text">
-                    <EncryptedText
-                        text="Confirming on Blockchain"
-                        className="text-black!"
-                    />
-                </span>
-            </span>
+            <Label text="Confirming on Blockchain" />
         )
 
     if (isWithdrawConfirmed)
@@ -54,24 +31,8 @@ export function WithdrawButtonLabel({
         )
 
     return commitmentData ? (
-        <span className="flex items-center gap-2 text-black fade-in">
-            <span className="loader-btn" />
-            <span className="fade-text">
-                <EncryptedText
-                    text="Withdraw 1 MNT"
-                    className="text-black!"
-                />
-            </span>
-        </span>
+        < Label text="Withdraw 1 MNT" />
     ) : (
-        <span className="flex items-center gap-2 text-black fade-in">
-            <span className="loader-btn" />
-            <span className="fade-text">
-                <EncryptedText
-                    text="Paste Encoded Note"
-                    className="text-black!"
-                />
-            </span>
-        </span>
+        < Label text="Paste Encoded Note" />
     )
 }

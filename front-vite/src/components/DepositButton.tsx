@@ -8,8 +8,9 @@ import { Button, Icon } from '@/components/ui'
 import { parseViemError } from '@/helpers/parseViemError'
 
 export function DepositButton() {
-  const { deposit, isDepositing, isConfirming, isConfirmed: isDepositConfirmed, depositError, isConnected, nextIndex, refetchNextIndex } = useSwirlPool()
+  const { deposit, depositTxHash, isDepositing, isDepositSubmitted, isDepositConfirming, isDepositConfirmed, isConnected, nextIndex, refetchNextIndex } = useSwirlPool()
   const [showModal, setShowModal] = useState(false)
+  const [isGenerationCommitmentBytes32, setisGenerationCommitmentBytes32] = useState(false)
   const { encodeData, encodedData } = useCommitmentStore()
 
   const handleDeposit = async () => {
@@ -19,12 +20,12 @@ export function DepositButton() {
     }
 
     try {
+      setisGenerationCommitmentBytes32(true)
       // Get leafIndex from nextIndex
       const leafIndex = Number(nextIndex || 0)
       if (!nextIndex) {
         console.warn('nextIndex not available, using 0 as fallback')
       }
-
       // Generate ZK commitment
       const poseidon = await getPoseidon()
       const secret = randField() // BigInt
@@ -34,6 +35,7 @@ export function DepositButton() {
 
       // Call deposit function
       await deposit(commitmentBytes32)
+      setisGenerationCommitmentBytes32(false)
 
       // Encode and store commitment data (includes leafIndex)
       encodeData({
@@ -72,13 +74,6 @@ export function DepositButton() {
     }
   }, [isDepositConfirmed, refetchNextIndex])
 
-  // Show error toast
-  useEffect(() => {
-    if (depositError) {
-      toast.error(`Deposit failed`)
-    }
-  }, [depositError])
-
   // Open modal when deposit is confirmed and data is encoded
   useEffect(() => {
     if (isDepositConfirmed && encodedData) {
@@ -105,14 +100,17 @@ export function DepositButton() {
       {/* Deposit Button */}
       <Button
         onClick={handleDeposit}
-        disabled={isDepositing || isConfirming || !isConnected}
+        disabled={isDepositing || isDepositConfirming || !isConnected}
         variant="primary"
-        isLoading={isDepositing || isConfirming}
+        isLoading={isDepositing || isDepositConfirming}
       >
         <DepositButtonLabel
+          isGenerationCommitmentBytes32={isGenerationCommitmentBytes32}
           isDepositing={isDepositing}
-          isConfirming={isConfirming}
+          isDepositSubmitted={isDepositSubmitted}
+          isConfirming={isDepositConfirming}
           isDepositConfirmed={isDepositConfirmed}
+          depositTxHash={depositTxHash}
         />
       </Button>
 
