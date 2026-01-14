@@ -138,6 +138,18 @@
   }
 }
 
+/* Faz o Loader e o Texto ocuparem o mesmo espaço */
+.stat-overlay {
+  display: grid;
+  grid-template-areas: "area";
+  place-items: center; /* Centraliza ambos */
+  width: 100%;
+}
+
+/* Força todos os filhos diretos a ocuparem a mesma área */
+.stat-overlay > * {
+  grid-area: area;
+}
 /* Button Base */
 .btn-base {
   display: inline-flex;

@@ -4,10 +4,6 @@
 
 export const APP_NAME = 'SWIRL'
 
-export const STATS = {
-  compliance: '100%',
-} as const
-
 export const FEATURES = [
   {
     id: 'non-custodial',

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useAccount } from 'wagmi'
-import { STATS, containerPadding } from '@/utils'
+import { containerPadding } from '@/utils'
 import { SWIRL_PRIVATE_POOL_ADDRESS } from '@/helpers/contract'
 import { publicClient } from '@/config/client'
 import { useSwirlPool } from '@/hooks/useSwirlPool'
@@ -37,20 +37,19 @@ export const Hero = () => {
         <div className="flex-1 flex flex-col gap-12 sm:gap-16">
           <div className="flex flex-col gap-8 sm:gap-10">
             <h2 className="heading-hero">
-              <span className="text-white">  Privacy with <EncryptedText text="Compliance" />
+              <span className="text-white">Programmable <EncryptedText text="Privacy" />
               </span>
               <br />
             </h2>
             <p className="text-[15px] sm:text-[16px] lg:text-[17px] text-[#888888] leading-relaxed lg:pr-8">
-              The first compliant privacy pool on Mantle Network.<br /> Break the on-chain link between your addresses while
-              proving your funds are clean.
+              A privacy-preserving MNT pool on Mantle Network.<br />
+              Unlink deposits and withdrawals using zero-knowledge proofs.
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-8 sm:gap-12 lg:gap-16">
+          <div className="flex flex-wrap gap-8 sm:gap-12 lg:gap-4">
             <StatusItem value={balance} label="Total Value Locked" />
             <StatusItem value={nextIndex} label="Total Deposits" />
-            <StatusItem value={STATS.compliance} label="Compliance Rate" />
           </div>
         </div>
 
