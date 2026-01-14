@@ -1,6 +1,9 @@
 import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
 import { type Address, type Hex } from 'viem';
 import { SWIRL_PRIVATE_POOL_ADDRESS, SWIRL_PRIVATE_POOL_ABI } from '../helpers/contract';
+import { simulateContract, writeContract } from 'viem/actions';
+import { publicClient } from '@/config';
+import { useWalletClient } from 'wagmi'
 
 /**
  * Custom hook for interacting with Swirl Private Pool contract
@@ -8,6 +11,9 @@ import { SWIRL_PRIVATE_POOL_ADDRESS, SWIRL_PRIVATE_POOL_ABI } from '../helpers/c
  */
 export function useSwirlPool() {
   const { address, isConnected } = useAccount();
+  const walletClient = useWalletClient({
+    account: address
+  })
 
   // Read contract state
   const { data: denomination, isLoading: isLoadingDenomination } = useReadContract({
@@ -98,12 +104,20 @@ export function useSwirlPool() {
     nullifierHash: Address,
     recipient: Address
   ) => {
-    await writeWithdrawContract({
+    if (!walletClient.data) {
+      throw new Error('Wallet client not connected');
+    }
+
+    const { request } = await simulateContract(publicClient, {
       address: SWIRL_PRIVATE_POOL_ADDRESS,
       abi: SWIRL_PRIVATE_POOL_ABI,
       functionName: 'withdraw',
       args: [proof, root, nullifierHash, recipient],
+      account: recipient,
     });
+
+    return await writeContract(walletClient.data, request);
+
   };
 
   return {

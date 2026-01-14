@@ -6,7 +6,7 @@ import { compute } from '@/scripts/compute.mjs'
 import { generateProof } from '@/helpers/generateProof'
 import { useAccount } from 'wagmi'
 import { Button } from '@/components/ui'
-import { isAddress, type Address } from 'viem'
+import { BaseError, ContractFunctionRevertedError, isAddress, type Address } from 'viem'
 import { WithdrawSuccessModal, WithdrawButtonLabel } from '@/components'
 
 export const WithdrawButton = () => {
@@ -119,11 +119,22 @@ export const WithdrawButton = () => {
 
       console.log('✅ Withdrawal transaction submitted!')
       toast.success('Transaction sent! Waiting for confirmation...')
-    } catch (err: any) {
+    } catch (err) {
+      if (err instanceof BaseError) {
+        const revertError = err.walk(err => err instanceof ContractFunctionRevertedError)
+        if (revertError instanceof ContractFunctionRevertedError) {
+          const errorName = revertError.data?.errorName ?? ''
+          if (errorName === "NullifierAlreadyUsed") {
+            toast.error("Nullifer already used.")
+          }
+        }
+      } else {
+        toast.error('Unknown error')
+      }
       console.error('❌ Error:', err)
-      toast.error(err.message || 'Unknown error')
     } finally {
       setIsGeneratingProof(false)
+      console.log("finally")
     }
   }
 
