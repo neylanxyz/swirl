@@ -3,11 +3,11 @@ import { useState, useEffect } from 'react'
 import { useSwirlPool } from '@/hooks/useSwirlPool'
 import { getPoseidon, randField, toBytes32 } from '@/helpers/zk'
 import { useCommitmentStore } from '@/stores/commitmentStore'
-import { DepositSuccessModal } from '@/components'
+import { DepositSuccessModal, DepositButtonLabel } from '@/components'
 import { Button, Icon } from '@/components/ui'
 
 export function DepositButton() {
-  const { deposit, isDepositing, isConfirming, isConfirmed, depositError, isConnected, nextIndex, refetchNextIndex } = useSwirlPool()
+  const { deposit, isDepositing, isConfirming, isConfirmed: isDepositConfirmed, depositError, isConnected, nextIndex, refetchNextIndex } = useSwirlPool()
   const [showModal, setShowModal] = useState(false)
   const { encodeData, encodedData } = useCommitmentStore()
 
@@ -50,12 +50,12 @@ export function DepositButton() {
 
   // Show toast when deposit is confirmed and refetch nextIndex
   useEffect(() => {
-    if (isConfirmed) {
+    if (isDepositConfirmed) {
       toast.success('Deposit successful!')
       // Refetch nextIndex to get updated value for next deposit
       refetchNextIndex()
     }
-  }, [isConfirmed, refetchNextIndex])
+  }, [isDepositConfirmed, refetchNextIndex])
 
   // Show error toast
   useEffect(() => {
@@ -66,10 +66,10 @@ export function DepositButton() {
 
   // Open modal when deposit is confirmed and data is encoded
   useEffect(() => {
-    if (isConfirmed && encodedData) {
+    if (isDepositConfirmed && encodedData) {
       setShowModal(true)
     }
-  }, [isConfirmed, encodedData])
+  }, [isDepositConfirmed, encodedData])
 
   return (
     <div className="flex flex-col gap-4 sm:gap-5 flex-1">
@@ -94,7 +94,11 @@ export function DepositButton() {
         variant="primary"
         isLoading={isDepositing || isConfirming}
       >
-        {isDepositing ? 'Depositing...' : isConfirming ? 'Confirming...' : 'Deposit 1 MNT'}
+        <DepositButtonLabel
+          isDepositing={isDepositing}
+          isConfirming={isConfirming}
+          isDepositConfirmed={isDepositConfirmed}
+        />
       </Button>
 
       {/* Modal for encoded data */}
