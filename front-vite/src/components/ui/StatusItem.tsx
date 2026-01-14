@@ -36,7 +36,7 @@ export const StatusItem = ({ value, label }: StatItemProps) => {
                             : "opacity-0 translate-y-1"
                         }`}
                 >
-                    <span className="text-[28px] sm:text-[34px] font-bold text-[#00FFB3] leading-none">
+                    <span className="text-[28px] sm:text-[34px] font-bold text-[#00FFB3] leading-none text-nowrap">
                         {value}
                     </span>
                 </div>

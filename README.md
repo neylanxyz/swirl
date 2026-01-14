@@ -25,20 +25,20 @@ This contract allows users to deposit funds anonymously and later withdraw them 
 
 ## Pool Parameters
 
-| Parameter        | Value            |
-|------------------|------------------|
-| Denomination     | `1 MNT`          |
-| Protocol Fee     | `0.1 MNT`        |
-| Tree Depth       | `20`             |
-| Max Deposits     | `1,048,576`      |
-| Hash Function    | Poseidon (T2)    |
-| ZK System        | Noir             |
+| Parameter     | Value         |
+| ------------- | ------------- |
+| Denomination  | `1 MNT`       |
+| Protocol Fee  | `0.1 MNT`     |
+| Tree Depth    | `20`          |
+| Max Deposits  | `1,048,576`   |
+| Hash Function | Poseidon (T2) |
+| ZK System     | Noir          |
 
 ---
 
 ## SwirlPrivatePool Overview
 
-This is the main contract of Swirl. It  handles deposits, withdraws, fees and regulatory controls such as pauses and blacklist.
+This is the main contract of Swirl. It handles deposits, withdraws, fees and regulatory controls such as pauses and blacklist.
 
 In the `constructor` we set `IVerifier` and `IPoseidon`, which are necessary to verify ZK Proofs and compute Poseidon hashes in Solidity.
 `IVerifier` is generated using the `bb.js` lib and `IPoseidon` can be generated using `circomlib.js`. A full guide on how to generate and deploy those contracts will be provided later in this README.
@@ -47,14 +47,11 @@ In the `constructor` we set `IVerifier` and `IPoseidon`, which are necessary to 
 
 You can find more information about these contracts here: https://github.com/OpenZeppelin/openzeppelin-contracts
 
-
-
---- 
+---
 
 ## Technical Overview
 
 The `SwirlPrivatePool` contract implements a **commit–reveal–withdraw privacy pool** using a **Poseidon-based incremental Merkle tree** and **Noir zero-knowledge proofs**. The system separates **deposit identity** from **withdrawal identity**, allowing users to redeem funds without revealing which deposit they originated from.
-
 
 ### Core Components
 
@@ -77,6 +74,7 @@ This fixed-size design is essential for anonymity, ensuring all deposits are ind
 - Poseidon (BN254) is used as the hash function to ensure compatibility with ZK circuits.
 
 **Tree state variables:**
+
 - `zeros[]` — precomputed zero values for each tree level
 - `filledSubtrees[]` — cached left nodes for efficient insertion
 - `currentRoot` — latest Merkle root
@@ -89,7 +87,6 @@ Each deposit inserts a new leaf (`commitment`) and updates the Merkle root.
 #### 3. Commitments
 
 A commitment is computed off-chain as:
-
 
 `commitment = Poseidon(secret, nullifier)`
 
@@ -147,9 +144,9 @@ these operations are performed by the Swirl application on behalf of the user.
 
 - Fees are accumulated in totalFees
 - Fees can be:
-   - Withdrawn to a treasury address
-   - Burned by sending to the dead address (only when paused)
-   - Fee operations are owner-restricted and protected against reentrancy.
+  - Withdrawn to a treasury address
+  - Burned by sending to the dead address (only when paused)
+  - Fee operations are owner-restricted and protected against reentrancy.
 
 ---
 
@@ -158,8 +155,8 @@ these operations are performed by the Swirl application on behalf of the user.
 The contract includes optional regulatory controls:
 
 - Blacklisted addresses cannot:
-   - Deposit
-   - Receive withdrawals
+  - Deposit
+  - Receive withdrawals
 - Blacklist management is owner-controlled
 
 These controls allow compliance layers without compromising cryptographic privacy.
@@ -170,8 +167,8 @@ These controls allow compliance layers without compromising cryptographic privac
 
 - The contract can be paused by the owner
 - When paused:
-   - Deposits and withdrawals are disabled
-   - Fees may be burned
+  - Deposits and withdrawals are disabled
+  - Fees may be burned
 - Useful for responding to vulnerabilities or protocol upgrades
 
 ---
@@ -204,23 +201,22 @@ Deposits and withdrawals are unlinkable at the protocol level, but timing analys
 
 ---
 
-
 ## Architecture Overview
 
 ### Deposit Flow
 
-   1. The app generates `secret` and `nullifier` locally.
-   2. Computes commitment by `Poseidon(secret, nullifier)`.
-   3. Calls `deposit(commitment)` on `SwirlPrivatePool`.
-   4. Generates a `base64` encoded note containing `(secret, nullifier, leafIndex)` the user will use to withdraw funds.
+1.  The app generates `secret` and `nullifier` locally.
+2.  Computes commitment by `Poseidon(secret, nullifier)`.
+3.  Calls `deposit(commitment)` on `SwirlPrivatePool`.
+4.  Generates a `base64` encoded note containing `(secret, nullifier, leafIndex)` the user will use to withdraw funds.
 
 ### Withdraw Flow
 
-   1. User pastes the encoded note.
-   2. User pastes the recipient address.
-   3. The app computes `merklePath` and `merkleIndices` using the commitments from previous deposits.
-   4. Generates the **ZK Proof** using `(secret, nullifier, merklePath, merkleIndices, root, nullifierHash)`.
-   5. Calls `withdraw(zk_proof, root, nullifierHash, recipient)` on `SwirlPrivatePool`.
+1.  User pastes the encoded note.
+2.  User pastes the recipient address.
+3.  The app computes `merklePath` and `merkleIndices` using the commitments from previous deposits.
+4.  Generates the **ZK Proof** using `(secret, nullifier, merklePath, merkleIndices, root, nullifierHash)`.
+5.  Calls `withdraw(zk_proof, root, nullifierHash, recipient)` on `SwirlPrivatePool`.
 
 ---
 
@@ -273,7 +269,6 @@ bb write_vk -b ./target/<noir_artifact_name>.json -o ./target --oracle_hash kecc
 
 Replace `<noir_artifact_name>` with the Noir build artifact located in `./target/`, in this case `swirl.json`.
 
-
 Then
 
 ```bash
@@ -300,7 +295,7 @@ const { poseidonContract } = require("circomlibjs");
 const code = poseidonContract.createCode(2);
 const abi = poseidonContract.generateABI(2);
 console.log(code);
-console.log(abi)
+console.log(abi);
 ```
 
 Now deploy `./helpers/ByteCodeDeployer.sol` and use the `deploy(bytecode)` function to deploy the Poseidon contract.
@@ -323,3 +318,62 @@ Deploy it passing to the constructor both the Verifier Contract address and the 
 
 #### 4. Deploy the frontend
 
+1. Install dependencies:
+
+```bash
+pnpm install
+```
+
+2. Run the development server:
+
+```bash
+pnpm run dev
+```
+
+3. Copy the environment file:
+
+```bash
+cp .env.example .env
+```
+
+4. Configure the environment variables in `.env`:
+
+```env
+VITE_PUBLIC_ENV="development" # Use "development" or "production"
+```
+
+**VITE_API explanation:**
+
+- **Production:**
+
+```env
+VITE_API="https://swirl-production-9f99.up.railway.app/"
+```
+
+- **Development:**
+
+```env
+VITE_API="http://localhost:<PORT>/"
+```
+
+> For development, you need to run the local indexer first, so the frontend can fetch data.
+
+---
+
+#### 5. Deploy the indexer
+
+1. Install dependencies:
+
+```bash
+pnpm install
+```
+
+2. Run the indexer:
+
+```bash
+pnpm run dev
+```
+
+3. Check the GraphQL indexer (production):
+
+[https://swirl-production-9f99.up.railway.app/](https://swirl-production-9f99.up.railway.app/)

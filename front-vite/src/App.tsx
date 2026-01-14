@@ -16,7 +16,7 @@ function App() {
             border: '1px solid rgba(0, 211, 149, 0.2)',
             borderRadius: '12px',
             padding: '16px',
-            fontFamily: "Sora, sans-serif;",
+            fontFamily: "Sora, sans-serif",
           },
           success: {
             iconTheme: {

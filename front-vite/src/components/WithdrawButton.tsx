@@ -1,173 +1,129 @@
 import { useState, useEffect } from 'react'
 import toast from 'react-hot-toast'
 import { useCommitmentStore } from '@/stores/commitmentStore'
-import { useIndexer, useSwirlPool } from '@/hooks'
-import { compute } from '@/scripts/compute.mjs'
-import { generateProof } from '@/helpers/generateProof'
+import { useWithdrawTransaction, WithdrawStep } from '@/hooks/useWithdrawTransaction'
 import { useAccount } from 'wagmi'
 import { Button } from '@/components/ui'
-import { BaseError, ContractFunctionRevertedError, isAddress, type Address } from 'viem'
-import { WithdrawSuccessModal, WithdrawButtonLabel } from '@/components'
+import { isAddress, type Address } from 'viem'
+import { Label, WithdrawSuccessModal } from '@/components'
+import { parseViemError } from '@/helpers/parseViemError'
+
+function textWithdrawLabels({ step }: { step: WithdrawStep }) {
+  switch (step) {
+    case WithdrawStep.FETCHING_DATA:
+      return "Searching Merkle Tree data..."
+    case WithdrawStep.GENERATING_INPUTS:
+      return "Calculating Merkle tree path..."
+    case WithdrawStep.GENERATING_PROOF:
+      return "Generating ZK Proof ( this can take a while )..."
+    case WithdrawStep.AWAITING_SIGNATURE:
+      return "Awaiting Signature..."
+    case WithdrawStep.SENDING_TRANSACTION:
+      return "Sending Transaction onchain..."
+    case WithdrawStep.CONFIRMING_TRANSACTION:
+      return "Confirming Transaction..."
+    case WithdrawStep.SUCCESS:
+      return "Withdrawal successful!"
+    case WithdrawStep.ERROR:
+      return "Withdrawal error!"
+    default:
+      return "Withdraw 1 MNT"
+  }
+}
 
 export const WithdrawButton = () => {
-  const { commitmentData, decodeData, error } = useCommitmentStore()
-  const { fetchCommitments, loading: indexerLoading } = useIndexer()
-  const { withdraw, isWithdrawing, isConfirmingWithdraw, isWithdrawConfirmed, withdrawError, withdrawHash } = useSwirlPool()
+  const { commitmentData, decodeData } = useCommitmentStore()
+
+  const {
+    step,
+    txHash,
+    executeWithdraw,
+    isLoading,
+    isSuccess,
+    isError,
+    reset,
+  } = useWithdrawTransaction();
+
   const { address } = useAccount()
   const [encodedInput, setEncodedInput] = useState('')
   const [recipientAddress, setRecipientAddress] = useState<Address | string>('')
-  const [isGeneratingProof, setIsGeneratingProof] = useState(false)
   const [showModal, setShowModal] = useState(false)
 
-  // Auto-decode when input changes with debounce
+  // Auto-decode
   useEffect(() => {
     if (!encodedInput.trim()) return
-
     const timer = setTimeout(() => {
-      try {
-        decodeData(encodedInput)
-      } catch (err) {
-        console.error('Decoding error:', err)
-        toast.error('Invalid encoded note format')
-      }
-    }, 3000) // 3 segundos após parar de digitar
-
+      try { decodeData(encodedInput) }
+      catch (err) { toast.error('Invalid encoded note format') }
+    }, 3000)
     return () => clearTimeout(timer)
   }, [encodedInput])
 
-  // Validate recipient address with debounce
+  // Validate recipient
   useEffect(() => {
     if (!recipientAddress) return
-
     const timer = setTimeout(() => {
-      if (!isAddress(recipientAddress)) {
-        toast.error('Not a valid address')
-      }
-    }, 3000) // 3 segundos após parar de digitar
-
+      if (!isAddress(recipientAddress)) toast.error('Not a valid address')
+    }, 3000)
     return () => clearTimeout(timer)
   }, [recipientAddress])
 
-  const handleWithdraw = async (recipientAddress?: Address | string) => {
+  const handleWithdraw = async () => {
     if (!commitmentData || !encodedInput) {
-      toast.error('Please paste and decode your code first!')
+      toast.error('Please paste your encoded note first!')
       return
     }
 
-    if (recipientAddress) {
-      if (!isAddress(recipientAddress)) {
-        return;
-      }
+    if (recipientAddress && !isAddress(recipientAddress)) {
+      toast.error('Invalid recipient address');
+      return;
     }
 
     try {
-      setIsGeneratingProof(true)
-
-      // 1. Fetch commitments from indexer (0 to leafIndex)
-      console.log(`\n🔍 Fetching commitments from leafIndex 0 to ${commitmentData.leafIndex}...`)
-
-      const deposits = await fetchCommitments(commitmentData.leafIndex)
-
-      if (!deposits || deposits.length === 0) {
-        throw new Error('No commitments found in indexer')
-      }
-
-      // Validate commitment order
-      for (let i = 0; i < deposits.length; i++) {
-        if (deposits[i].leafIndex !== i) {
-          throw new Error(`Commitments out of order! Expected leafIndex ${i}, got ${deposits[i].leafIndex}`)
-        }
-      }
-
-      console.log(`✅ Found ${deposits.length} commitments`)
-
-      // 2. Convert to commitment strings array
-      const commitments = deposits.map((d) => d.commitment)
-
-      // 3. Generate proof inputs with compute
-      console.log('\n🌳 Generating proof inputs...')
-
-      // @ts-ignore - compute.mjs exports function with 2 parameters
-      const inputs = await compute(commitments, encodedInput)
-
-      console.log('✅ Proof inputs generated successfully!')
-
-      // 4. Generate ZK proof
-      console.log('\n⚡ Generating ZK proof...')
-
-      // @ts-ignore - inputs has required fields
-      const proof = await generateProof(inputs)
-
-      console.log('✅ ZK proof generated successfully!')
-
-      // 5. Call withdraw on contract
-      console.log('\n📤 Calling withdraw on contract...')
-
-      if (!address) {
-        throw new Error('Connect your wallet first!')
-      }
-
-      // @ts-ignore - correct types at runtime
-      await withdraw(
-        proof.proof as `0x${string}`,
-        // @ts-ignore
-        inputs.root_bytes32 as `0x${string}`,
-        // @ts-ignore
-        inputs.nullifier_hash_bytes32 as `0x${string}`,
-        recipientAddress ? recipientAddress as Address : address
-      )
-
-      console.log('✅ Withdrawal transaction submitted!')
-      toast.success('Transaction sent! Waiting for confirmation...')
+      await executeWithdraw(
+        encodedInput,
+        commitmentData.leafIndex,
+        recipientAddress
+      );
     } catch (err) {
-      if (err instanceof BaseError) {
-        const revertError = err.walk(err => err instanceof ContractFunctionRevertedError)
-        if (revertError instanceof ContractFunctionRevertedError) {
-          const errorName = revertError.data?.errorName ?? ''
-          if (errorName === "NullifierAlreadyUsed") {
-            toast.error("Nullifer already used.")
-          }
+      const parsed = parseViemError(err);
+
+      if (parsed.type === 'user_rejected') {
+        toast.error('User rejected the transaction.');
+      } else if (parsed.errorName === "NullifierAlreadyUsed") {
+        toast.error("Nullifer already used.")
+      } else if (parsed.type === 'revert') {
+        if (parsed.reason === 'recipient sanctioned') {
+          toast.error('Can not withdraw to a Blacklisted address.');
+        } else {
+          toast.error(`Transaction reverted: ${parsed.reason}`);
         }
       } else {
-        toast.error('Unknown error')
+        toast.error('Withdrawal failed. Check console.');
       }
-      console.error('❌ Error:', err)
-    } finally {
-      setIsGeneratingProof(false)
-      console.log("finally")
+
+      setTimeout(() => {
+        reset();
+      }, 3000);
     }
   }
 
-  // Show modal when withdrawal is confirmed
-  useEffect(() => {
-    if (isWithdrawConfirmed && withdrawHash) {
-      toast.success('Withdrawal successful!')
-      setShowModal(true)
-    }
-  }, [isWithdrawConfirmed, withdrawHash])
+  // Gerenciamento do Modal
+  if (isSuccess && !showModal && txHash) {
+    setShowModal(true)
+  }
 
-  // Show error toast
-  useEffect(() => {
-    if (withdrawError) {
-      toast.error(`Withdrawal failed`)
-    }
-  }, [withdrawError])
-
-  // Show error toast for decoding errors
-  useEffect(() => {
-    if (error) {
-      toast.error(error)
-    }
-  }, [error])
+  const handleCloseModal = () => {
+    setShowModal(false)
+    reset()
+  }
 
   return (
     <div className="flex flex-col gap-4 sm:gap-5 flex-1">
-      {/* Withdrawal code input */}
       <div className="flex flex-col gap-2.5">
         <label className="text-[11px] sm:text-[12px] font-semibold uppercase tracking-wider text-[#888888]">
           Encoded Note
         </label>
-
         <textarea
           value={encodedInput}
           onChange={(e) => setEncodedInput(e.target.value)}
@@ -184,31 +140,26 @@ export const WithdrawButton = () => {
           placeholder="0x..."
           className="input font-mono text-[11px] sm:text-xs resize-y"
         />
-
       </div>
 
-      {/* Withdraw button */}
       <Button
-        onClick={() => handleWithdraw(recipientAddress)}
-        disabled={!commitmentData || isGeneratingProof || indexerLoading || isWithdrawing || isConfirmingWithdraw || isWithdrawConfirmed}
+        onClick={handleWithdraw}
+        disabled={!commitmentData || isLoading || isSuccess || isError}
         variant="primary"
-        isLoading={isGeneratingProof || isWithdrawing || isConfirmingWithdraw}
+        isLoading={isLoading}
       >
-        <WithdrawButtonLabel
-          isGeneratingProof={isGeneratingProof}
-          isWithdrawing={isWithdrawing}
-          isConfirmingWithdraw={isConfirmingWithdraw}
-          isWithdrawConfirmed={isWithdrawConfirmed}
-          commitmentData={commitmentData}
-        />
+        {!commitmentData ? (
+          <Label text={"Paste encoded note first"} />
+        ) : (
+          <Label text={textWithdrawLabels({ step: step })} />
+        )}
       </Button>
 
-      {/* Modal for withdrawal success */}
       <WithdrawSuccessModal
         recipientAddress={recipientAddress || address || ''}
         isOpen={showModal}
-        onClose={() => setShowModal(false)}
-        transactionHash={withdrawHash || ''}
+        onClose={handleCloseModal}
+        transactionHash={txHash || ''}
       />
     </div>
   )
