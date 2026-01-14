@@ -29,7 +29,7 @@ export const Hero = () => {
       console.log("error =", error)
     }
 
-  }, [balance])
+  }, [balance, nextIndex])
 
   return (
     <section className={`w-full h-full py-12 md:py-20 lg:py-28 ${containerPadding}`}>
