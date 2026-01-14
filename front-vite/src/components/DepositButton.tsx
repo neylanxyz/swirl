@@ -1,17 +1,59 @@
 import toast from 'react-hot-toast'
-import { useState, useEffect } from 'react'
-import { useSwirlPool } from '@/hooks/useSwirlPool'
+import { useEffect, useState } from 'react'
+import { useDepositTransaction, DepositStep } from '@/hooks/useDepositTransaction'
 import { getPoseidon, randField, toBytes32 } from '@/helpers/zk'
 import { useCommitmentStore } from '@/stores/commitmentStore'
-import { DepositSuccessModal, DepositButtonLabel } from '@/components'
+import { DepositSuccessModal, Label } from '@/components'
 import { Button, Icon } from '@/components/ui'
+import { useSwirlPool } from '@/hooks'
+import { useAccount } from 'wagmi'
 import { parseViemError } from '@/helpers/parseViemError'
 
+function textDepositLabels({ step }: { step: DepositStep }) {
+  switch (step) {
+    case DepositStep.GENERATING_COMMITMENT:
+      return "Generating Commitment Data ..."
+    case DepositStep.SIMULATING:
+      return "Simulating Transaction..."
+    case DepositStep.AWAITING_SIGNATURE:
+      return "Awaiting Signature..."
+    case DepositStep.SENDING_TRANSACTION:
+      return "Sending Transaction onchain..."
+    case DepositStep.CONFIRMING_TRANSACTION:
+      return "Confirming Transaction..."
+    case DepositStep.SUCCESS:
+      return "Deposit successful!"
+    case DepositStep.ERROR:
+      return "Deposit error!"
+    default:
+      return "Deposit 1 MNT"
+  }
+}
+
 export function DepositButton() {
-  const { deposit, depositTxHash, isDepositing, isDepositSubmitted, isDepositConfirming, isDepositConfirmed, isConnected, nextIndex, refetchNextIndex } = useSwirlPool()
-  const [showModal, setShowModal] = useState(false)
-  const [isGenerationCommitmentBytes32, setisGenerationCommitmentBytes32] = useState(false)
-  const { encodeData, encodedData } = useCommitmentStore()
+  const {
+    step,
+    txHash,
+    executeDeposit,
+    isLoading,
+    isSuccess,
+    isError,
+    reset,
+  } = useDepositTransaction();
+
+  const { nextIndex, refetchNextIndex } = useSwirlPool();
+  const { isConnected } = useAccount();
+  const [showModal, setShowModal] = useState(false);
+  const { encodeData, encodedData } = useCommitmentStore();
+
+  // Show toast when deposit is confirmed and refetch nextIndex
+  useEffect(() => {
+    if (step === "SUCCESS" || isSuccess) {
+      toast.success('Deposit successful!')
+      // Refetch nextIndex to get updated value for next deposit
+      refetchNextIndex()
+    }
+  }, [isSuccess, refetchNextIndex])
 
   const handleDeposit = async () => {
     if (!isConnected) {
@@ -20,70 +62,61 @@ export function DepositButton() {
     }
 
     try {
-      setisGenerationCommitmentBytes32(true)
-      // Get leafIndex from nextIndex
-      const leafIndex = Number(nextIndex || 0)
-      if (!nextIndex) {
-        console.warn('nextIndex not available, using 0 as fallback')
-      }
-      // Generate ZK commitment
-      const poseidon = await getPoseidon()
-      const secret = randField() // BigInt
-      const nullifier = randField() // BigInt
-      const commitment = poseidon([secret, nullifier]) // BigInt
-      const commitmentBytes32 = toBytes32(poseidon.F.toObject(commitment)) as `0x${string}`
+      await executeDeposit(async () => {
+        const leafIndex = Number(nextIndex || 0)
+        if (!nextIndex) {
+          console.warn('nextIndex not available, using 0 as fallback')
+        }
 
-      // Call deposit function
-      await deposit(commitmentBytes32)
-      setisGenerationCommitmentBytes32(false)
+        const poseidon = await getPoseidon()
+        const secret = randField()
+        const nullifier = randField()
+        const commitment = poseidon([secret, nullifier])
+        const commitmentBytes32 = toBytes32(poseidon.F.toObject(commitment)) as `0x${string}`
 
-      // Encode and store commitment data (includes leafIndex)
-      encodeData({
-        secret,
-        nullifier,
-        leafIndex,
-      })
+        encodeData({
+          secret,
+          nullifier,
+          leafIndex,
+        })
 
-      toast.success('Transaction sent! Waiting for confirmation...')
+        return commitmentBytes32;
+      });
     } catch (err) {
+      // Agora o erro chega aqui corretamente porque o hook fez "throw err"
       const parsed = parseViemError(err);
 
       if (parsed.type === 'user_rejected') {
         toast.error('User rejected the transaction.');
-        return;
-      }
-
-      if (parsed.type === 'revert') {
+      } else if (parsed.type === 'revert') {
         if (parsed.reason === 'this address is blacklisted and cannot deposit') {
           toast.error('Blacklisted address.');
-          return;
+        } else {
+          toast.error(`Transaction reverted: ${parsed.reason}`);
         }
+      } else {
+        toast.error('Unknown error occurred');
       }
 
-      toast.error('Unknown error');
-      console.log("erorr", err)
+      // IMPORTANTE: Resetar o estado após um tempo curto ou imediatamente
+      // para que o usuário veja a mensagem de erro e o botão volte ao normal
+      setTimeout(() => {
+        reset();
+      }, 3000); // Volta para "Deposit 1 MNT" após 3 segundos
     }
   }
 
-  // Show toast when deposit is confirmed and refetch nextIndex
-  useEffect(() => {
-    if (isDepositConfirmed) {
-      toast.success('Deposit successful!')
-      // Refetch nextIndex to get updated value for next deposit
-      refetchNextIndex()
-    }
-  }, [isDepositConfirmed, refetchNextIndex])
+  if (isSuccess && !showModal && encodedData) {
+    setShowModal(true)
+  }
 
-  // Open modal when deposit is confirmed and data is encoded
-  useEffect(() => {
-    if (isDepositConfirmed && encodedData) {
-      setShowModal(true)
-    }
-  }, [isDepositConfirmed, encodedData])
+  const handleCloseModal = () => {
+    setShowModal(false);
+    reset();
+  }
 
   return (
     <div className="flex flex-col gap-4 sm:gap-5 flex-1">
-
       <div className="flex flex-col gap-3">
         <div className="flex items-center gap-2">
           <Icon name="shield" size={14} color="#00FFB3" className="flex-shrink-0" />
@@ -97,27 +130,18 @@ export function DepositButton() {
         </div>
       </div>
 
-      {/* Deposit Button */}
       <Button
         onClick={handleDeposit}
-        disabled={isDepositing || isDepositConfirming || !isConnected}
+        disabled={isLoading || isSuccess || isError}
         variant="primary"
-        isLoading={isDepositing || isDepositConfirming}
+        isLoading={isLoading}
       >
-        <DepositButtonLabel
-          isGenerationCommitmentBytes32={isGenerationCommitmentBytes32}
-          isDepositing={isDepositing}
-          isDepositSubmitted={isDepositSubmitted}
-          isConfirming={isDepositConfirming}
-          isDepositConfirmed={isDepositConfirmed}
-          depositTxHash={depositTxHash}
-        />
+        <Label text={textDepositLabels({ step: step })} />
       </Button>
 
-      {/* Modal for encoded data */}
       <DepositSuccessModal
         isOpen={showModal}
-        onClose={() => setShowModal(false)}
+        onClose={handleCloseModal}
         encodedData={encodedData}
       />
     </div>
