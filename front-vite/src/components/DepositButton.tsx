@@ -33,7 +33,6 @@ function textDepositLabels({ step }: { step: DepositStep }) {
 export function DepositButton() {
   const {
     step,
-    txHash,
     executeDeposit,
     isLoading,
     isSuccess,
