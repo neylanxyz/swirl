@@ -52,7 +52,7 @@ export function useWithdrawTransaction() {
 
             // --- ETAPA 1: Fetch Commitments (Indexer) ---
             setStep(WithdrawStep.FETCHING_DATA);
-            const deposits = await fetchCommitments(leafIndex);
+            const deposits = await fetchCommitments(leafIndex, 1000);
 
             if (!deposits || deposits.length === 0) {
                 throw new Error('No commitments found in indexer');

@@ -16,7 +16,7 @@ export function useIndexer() {
     /**
      * Busca todos os commitments do índice 0 até maxLeafIndex
      */
-    const fetchCommitments = useCallback(async (maxLeafIndex: number): Promise<Commitment[]> => {
+    const fetchCommitments = useCallback(async (maxLeafIndex: number, limit: number = 1000): Promise<Commitment[]> => {
         setLoading(true);
         setError(null);
 
@@ -30,12 +30,12 @@ export function useIndexer() {
 
         try {
             const query = `
-                query GetCommitments($maxLeafIndex: Int!) {
+                query GetCommitments($maxLeafIndex: Int!, $limit: Int!) {
                     depositEvents(
                         where: { leafIndex_lte: $maxLeafIndex }
                         orderBy: "leafIndex"
                         orderDirection: "asc"
-                        limit: 10000
+                        limit: $limit
                     ) {
                         items {
                             leafIndex
@@ -52,7 +52,7 @@ export function useIndexer() {
                 },
                 body: JSON.stringify({
                     query,
-                    variables: { maxLeafIndex }
+                    variables: { maxLeafIndex, limit }
                 })
             });
             console.log("response,", response)
@@ -65,6 +65,7 @@ export function useIndexer() {
             console.log("resspos", result)
 
             if (result.errors) {
+                console.error('❌ GraphQL Errors:', JSON.stringify(result.errors, null, 2));
                 throw new Error(result.errors[0]?.message || 'GraphQL error');
             }
 
@@ -127,6 +128,7 @@ export function useIndexer() {
             const result = await response.json();
 
             if (result.errors) {
+                console.error('❌ GraphQL Errors:', JSON.stringify(result.errors, null, 2));
                 throw new Error(result.errors[0]?.message || 'GraphQL error');
             }
 
