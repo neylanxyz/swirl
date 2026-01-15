@@ -26,8 +26,9 @@ export const FEATURES = [
 ] as const
 
 export const NAV_LINKS = [
-  { label: 'Docs', externalPage: 'https://github.com/neylanxyz/swirl/blob/main/README.md' },
+  { label: 'About', href: '/about' },
   { label: 'FAQ', href: '/FAQ' },
+  { label: 'Docs', externalPage: 'https://github.com/neylanxyz/swirl/blob/main/README.md' },
 ]
 
 export const BREAKPOINTS = {

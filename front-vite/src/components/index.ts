@@ -1,3 +1,4 @@
+export * from "./About"
 export * from "./ActionCard"
 export * from "./CopyAndPasteButton"
 export * from "./CustomConnectButton"
