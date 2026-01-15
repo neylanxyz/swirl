@@ -35,6 +35,7 @@ export function useIndexer() {
                         where: { leafIndex_lte: $maxLeafIndex }
                         orderBy: "leafIndex"
                         orderDirection: "asc"
+                        limit: 10000
                     ) {
                         items {
                             leafIndex
