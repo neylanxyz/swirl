@@ -203,6 +203,12 @@ Deposits and withdrawals are unlinkable at the protocol level, but timing analys
 
 ## Architecture Overview
 
+<img 
+  src="./docs/architecture.png" 
+  alt="Deposit and Withdraw Flow"
+  width="100%"
+/>
+
 ### Deposit Flow
 
 1.  The app generates `secret` and `nullifier` locally.

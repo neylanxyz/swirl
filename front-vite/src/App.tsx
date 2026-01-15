@@ -1,5 +1,5 @@
 import { Toaster } from 'react-hot-toast'
-import { Header, Hero, Footer, FAQList } from '@/components'
+import { Header, Hero, Footer, FAQList, About } from '@/components'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
@@ -39,6 +39,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Hero />} />
             <Route path="/faq" element={<FAQList />} />
+            <Route path="/about" element={<About />} />
           </Routes>
         </BrowserRouter >
       </main>
