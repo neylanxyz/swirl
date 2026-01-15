@@ -2,6 +2,7 @@ import { memo } from 'react'
 import { APP_NAME, containerPadding } from '@/utils'
 import LogoImage from "../../public/logo.png"
 import { GithubIcon } from 'lucide-react'
+import { XLogo } from './icons/XLogo'
 
 const FooterLogo = memo(function FooterLogo() {
   return (
@@ -27,6 +28,15 @@ export const Footer = memo(function Footer() {
               "noreferrer noopener"
             )
           }} />
+          <button onClick={() => {
+            window.open(
+              "https://x.com/swirlprotocol",
+              "_blank",
+              "noreferrer noopener"
+            )
+          }} >
+            <XLogo className='text-[#666666] size-6 hover:text-[#00FFB3] cursor-pointer transition-colors duration-300 ease-in-out ' />
+          </button>
           <div className="text-[13px] sm:text-[14px] text-[#666666]">
             Powered by <span className="text-[#00FFB3] cursor-pointer hover:text-[#00FFB3]/75" onClick={() => {
               window.open(
