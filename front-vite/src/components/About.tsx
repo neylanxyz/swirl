@@ -119,7 +119,7 @@ export const About = memo(function About() {
           </h1>
 
           <p className="text-[15px] sm:text-[16px] text-[#888888] max-w-2xl leading-relaxed">
-            Swirl is a privacy-preserving mixing protocol that enables confidential transactions
+            Swirl is a privacy-preserving protocol that enables confidential transactions
             on Mantle Network using zero-knowledge proofs.
           </p>
         </div>
