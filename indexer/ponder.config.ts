@@ -7,7 +7,8 @@ export default createConfig({
     mantlesepolia: {
       id: 5003,
       rpc: process.env.PONDER_RPC_URL_5003 || "https://rpc.sepolia.mantle.xyz",
-    }
+      pollingInterval: 5_000,
+    },
   },
   contracts: {
     SwirlPrivatePool: {
