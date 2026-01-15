@@ -211,7 +211,7 @@ export const About = memo(function About() {
 
               <p className="mt-2">
                 The result? You can withdraw to a completely different address,
-                and no one can prove it came from your deposit.
+                and only you can prove it came from your deposit.
               </p>
             </div>
           </SectionCard>
@@ -293,14 +293,14 @@ export const About = memo(function About() {
                 phase="Phase 1"
                 status="completed"
                 title="Testnet Launch"
-                description="Deployment on Mantle Sepolia with 1 MNT denomination. Testing core functionality, ZK proofs, and security audits."
+                description="Deployment on Mantle Sepolia with 1 MNT denomination. Testing core functionality and ZK proofs."
               />
 
               <RoadmapItem
                 phase="Phase 2"
                 status="in-progress"
                 title="Mainnet Beta"
-                description="Production deployment on Mantle Network with enhanced monitoring, bug bounties, and gradual increase in deposit limits."
+                description="Conduct comprehensive security audits and launch a bug bounty program. Deploy to production on the Mantle Network with enhanced monitoring, followed by a phased increase in deposit limits to ensure stability and risk mitigation."
               />
 
               <RoadmapItem
